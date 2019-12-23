@@ -15,8 +15,6 @@ class MainActivity : AppCompatActivity() {
         val version = pInfo.versionName
 
         val appVersionTxtView = findViewById<TextView>(R.id.appVersionTxtView) as TextView
-        appVersionTxtView.setOnClickListener{
-            appVersionTxtView.text = version
-        }
+        appVersionTxtView.text = version
     }
 }
