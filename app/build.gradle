@@ -55,9 +55,9 @@ android {
                 release
                         {
                             storeFile file(keystoreProperties["release_key_path"])
-                            storePassword file(keystoreProperties["release_key_pwd"])
-                            keyAlias file(keystoreProperties["release_key_allias"])
-                            keyPassword file(keystoreProperties["release_key_allias_pwd"])
+                            storePassword keystoreProperties["release_key_pwd"]
+                            keyAlias keystoreProperties["release_key_allias"]
+                            keyPassword keystoreProperties["release_key_allias_pwd"]
                         }
             }
 
