@@ -10,7 +10,8 @@ def getTagName = { ->
         commandLine 'git', 'describe'
         standardOutput = stdout
     }
-    return stdout.toString().trim()
+    def output = stdout.toString().trim()
+    return output[0] + "." + output[2]
 }
 def getPatchesCount = { ->
     def tag = getTagName()
