@@ -39,6 +39,8 @@ def getVersionCode = { ->
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
+    Properties keystoreProperties = new Properties()
+    keystoreProperties.load(new FileInputStream(rootProject.file("keyStore.properties")))
     defaultConfig {
         applicationId "com.example.myapplication"
         minSdkVersion 23
@@ -47,6 +49,18 @@ android {
         versionName getVersionName()
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs
+            {
+                release
+                        {
+                            storeFile file(keystoreProperties["release_key_path"])
+                            storePassword file(keystoreProperties["release_key_pwd"])
+                            keyAlias file(keystoreProperties["release_key_allias"])
+                            keyPassword file(keystoreProperties["release_key_allias_pwd"])
+                        }
+            }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -55,9 +69,6 @@ android {
     }
 
 }
-
-
-
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
