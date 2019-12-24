@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
-def getVersionName = { ->
+def getTagName = { ->
     def stdout = new ByteArrayOutputStream()
     exec {
         commandLine 'git', 'describe', '--tags'
@@ -12,6 +12,28 @@ def getVersionName = { ->
     }
     return stdout.toString().trim()
 }
+
+def getPatchesCount = { tag ->
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-list', "${tag}..HEAD", "--no-merges", "--count"
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
+}
+
+def getVersionName = { ->
+    def response = getTagName()
+    def tag = response[0] + '.' + response[2] + '.' + response[4]
+    return tag
+}
+
+def getVersionCode = { ->
+    def version = getVersionName()
+    def versionCode = version[0].toInteger()*1000000 + version[2].toInteger()*10000 + version[4].toInteger()*10
+    return versionCode
+}
+
 
 android {
     compileSdkVersion 29
@@ -21,7 +43,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 29
         versionCode 1
-        versionName getVersionName()
+        versionName getVersionCode()
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -32,6 +54,7 @@ android {
     }
 
 }
+
 
 
 
