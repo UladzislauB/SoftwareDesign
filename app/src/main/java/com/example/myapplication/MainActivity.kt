@@ -1,26 +1,59 @@
 package com.example.myapplication
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.Settings
 import android.widget.TextView
-import android.provider.Settings.Secure
+import android.telephony.TelephonyManager
 
 
 
 class MainActivity : AppCompatActivity() {
 
+    private  var content: String = ""
+    private var REQUEST_CODE_READ_PHONE_STATE = 42
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val pInfo = this.packageManager.getPackageInfo(packageName, 0)
-        val version = pInfo.versionName
-
         val appVersionTxtView = findViewById<TextView>(R.id.appVersionTxtView)
-        appVersionTxtView.text = version
+        appVersionTxtView.text = BuildConfig.VERSION_NAME
 
-        val deviceIdTxtView = findViewById<TextView>(R.id.deviceIdTxtView)
-        deviceIdTxtView.text = Secure.getString(contentResolver, Secure.ANDROID_ID)
+        val deviceIdTxtView: TextView = findViewById(R.id.deviceIdTxtView)
+
+        val permissionStatus = checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
+        if (permissionStatus != PackageManager.PERMISSION_GRANTED)
+        {
+            requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE),
+                REQUEST_CODE_READ_PHONE_STATE)
+        }
+        else
+        {
+            val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+            content = telephonyManager.getDeviceId()
+        }
+
+        deviceIdTxtView.text = content
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(requestCode != REQUEST_CODE_READ_PHONE_STATE) return
+
+
+        val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        val permissionStatus = checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
+        if (permissionStatus == PackageManager.PERMISSION_GRANTED)
+        {
+            val deviceIdTxtView: TextView = findViewById(R.id.deviceIdTxtView)
+            deviceIdTxtView.text = telephonyManager.getDeviceId()
+        }
     }
 }
