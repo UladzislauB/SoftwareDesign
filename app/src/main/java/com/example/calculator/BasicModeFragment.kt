@@ -33,10 +33,10 @@ class BasicModeFragment : Fragment() {
         return fragmentView
     }
 
-    private fun updateScreen(string: String) {
-        expression += string
-        screen?.setText(expression)
-    }
+                private fun updateScreen(string: String) {
+                    expression += string
+                    screen?.setText(expression)
+                }
 
     private fun onDelete() {
         expression = expression.dropLast(1)

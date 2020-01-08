@@ -15,22 +15,22 @@
         <Button
             android:id="@+id/btn_sin"
             style="@style/Button"
-            android:text="sin" />
+            android:text="@string/sin" />
 
         <Button
             android:id="@+id/btn_ln"
             style="@style/Button"
-            android:text="ln" />
+            android:text="@string/ln" />
 
         <Button
             android:id="@+id/btn_pi"
             style="@style/Button"
-            android:text="pi" />
+            android:text="@string/pi" />
 
         <Button
             android:id="@+id/btn_sc_op"
             style="@style/Button"
-            android:text="(" />
+            android:text="@string/parenthesis_left" />
     </LinearLayout>
 
     <LinearLayout
@@ -43,22 +43,22 @@
         <Button
             android:id="@+id/btn_cos"
             style="@style/Button"
-            android:text="cos" />
+            android:text="@string/cos" />
 
         <Button
             android:id="@+id/btn_log"
             style="@style/Button"
-            android:text="log" />
+            android:text="@string/log" />
 
         <Button
             android:id="@+id/btn_e"
             style="@style/Button"
-            android:text="exp" />
+            android:text="@string/exp" />
 
         <Button
             android:id="@+id/btn_sc_cl"
             style="@style/Button"
-            android:text=")" />
+            android:text="@string/parenthesis_right" />
     </LinearLayout>
 
     <LinearLayout
@@ -71,22 +71,22 @@
         <Button
             android:id="@+id/btn_percent"
             style="@style/Button"
-            android:text="%" />
+            android:text="@string/percent" />
 
         <Button
             android:id="@+id/btn_fact"
             style="@style/Button"
-            android:text="!" />
+            android:text="@string/fact" />
 
         <Button
             android:id="@+id/btn_pow"
             style="@style/Button"
-            android:text="^" />
+            android:text="@string/pow"/>
 
         <Button
             android:id="@+id/btn_sqrt"
             style="@style/Button"
-            android:text="sqrt" />
+            android:text="@string/sqrt" />
     </LinearLayout>
 
 </LinearLayout>
