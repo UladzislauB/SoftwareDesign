@@ -17,11 +17,7 @@
         <item name="android:layout_height">match_parent</item>
     </style>
 
-    <style name="ButtonScientific" parent="Button">
-        <item name="android:textColor">@android:color/holo_blue_light</item>
-    </style>
-
-    <style name="ButtonControl" parent="ButtonScientific">
+    <style name="ButtonControl" parent="Button">
         <item name="android:textSize">24sp</item>
     </style>
 </resources>

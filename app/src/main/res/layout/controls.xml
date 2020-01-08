@@ -2,9 +2,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_weight="1"
-    android:background="@drawable/controls_background                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           "
     android:orientation="vertical"
-    >
+    android:background="@drawable/controls_background">
 
     <Button
         android:id="@+id/btn_del"
@@ -14,22 +13,22 @@
     <Button
         android:id="@+id/btn_div"
         style="@style/ButtonControl"
-        android:text="/"
+        android:text="@string/btn_div"
         android:textSize="40sp" />
 
     <Button
         android:id="@+id/btn_mul"
         style="@style/ButtonControl"
-        android:text="*" />
+        android:text="@string/btn_mul" />
 
     <Button
         android:id="@+id/btn_sub"
         style="@style/ButtonControl"
-        android:text="-" />
+        android:text="@string/btn_sub" />
 
     <Button
         android:id="@+id/btn_add"
         style="@style/ButtonControl"
-        android:text="+"
+        android:text="@string/btn_add"
         android:textSize="32sp" />
 </LinearLayout>

@@ -11,4 +11,8 @@
     <string name="btn_7">7</string>
     <string name="btn_8">8</string>
     <string name="btn_9">9</string>
+    <string name="btn_mul">*</string>
+    <string name="btn_div">/</string>
+    <string name="btn_sub">-</string>
+    <string name="btn_add">+</string>
 </resources>
