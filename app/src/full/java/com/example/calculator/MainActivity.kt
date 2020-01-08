@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity() {
 
         var fragmentsList = ArrayList<Fragment>()
         fragmentsList.add(BasicModeFragment())
-        fragmentsList.add(ScientificModeFragment())
 
         if(orientation == Configuration.ORIENTATION_PORTRAIT)
         {
