@@ -1,6 +1,7 @@
 package com.example.calculator
 
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,26 +13,30 @@ import android.widget.EditText
 /**
  * A simple [Fragment] subclass.
  */
-class ScientificModeFragment : Fragment() {
+class ScientificModeFragment : Fragment(), DataInterface {
 
     private var screen: EditText? = null
     private lateinit var expression: String
-
+    private var needClear: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
-        val fragmentView = inflater.inflate(R.layout.fragment_scientific_mode, container, false);
         screen = activity?.findViewById(R.id.screen)
-        expression = (screen as EditText).text.toString()
+
+        val fragmentView = inflater.inflate(R.layout.fragment_scientific_mode, container, false)
         setListeners(fragmentView)
         return fragmentView
     }
 
+    override fun setResult(needClear: Boolean) {
+        this.needClear = needClear
+    }
+
     private fun updateScreen(string: String) {
+        expression = screen?.text.toString()
         expression += string
         screen?.setText(expression)
     }
@@ -56,6 +61,12 @@ class ScientificModeFragment : Fragment() {
 
         for (item in clickableViews) {
             item.setOnClickListener {
+                if(needClear){
+                    expression = "0"
+                    screen?.setText("")
+                    needClear = false
+                    (activity as DataInterface).setResult(needClear)
+                }
                 when(item){
                     cbrt -> updateScreen("cbrt(")
                     lg -> updateScreen("log10(")
@@ -63,11 +74,9 @@ class ScientificModeFragment : Fragment() {
                     sc_cl -> updateScreen(")")
                     sc_op -> updateScreen("(")
                     sqrt -> updateScreen("sqrt(")
-                    else -> updateScreen((item as Button).text.toString())
+                    else -> updateScreen((item as Button).text.toString() + "(")
                 }
             }
         }
     }
-
-
 }

@@ -15,7 +15,8 @@ import net.objecthunter.exp4j.ExpressionBuilder
 /**
  * A simple [Fragment] subclass.
  */
-class BasicModeFragment : Fragment() {
+class BasicModeFragment : Fragment(), DataInterface {
+
 
     private var screen: EditText? = null
     private lateinit var expression: String
@@ -28,7 +29,6 @@ class BasicModeFragment : Fragment() {
         // Inflate the layout for this fragment
         val fragmentView = inflater.inflate(R.layout.fragment_basic_mode, container, false);
         screen = activity?.findViewById(R.id.screen)
-        expression = (screen as EditText).text.toString()
         setListeners(fragmentView)
 
         val buttonDelete = fragmentView.findViewById<TextView>(R.id.btn_del)
@@ -40,10 +40,16 @@ class BasicModeFragment : Fragment() {
 
         val eq = fragmentView.findViewById<TextView>(R.id.btn_eq)
         eq.setOnClickListener {
+
             Evaluate(screen)
         }
 
         return fragmentView
+    }
+
+
+    override fun setResult(needClear: Boolean) {
+        this.needClear = needClear
     }
 
     private fun clear()
@@ -53,13 +59,15 @@ class BasicModeFragment : Fragment() {
     }
 
     private fun updateScreen(string: String) {
+        expression = screen?.text.toString()
         expression += string
         screen?.setText(expression)
     }
 
     private fun onDelete() {
-        expression = expression.dropLast(1)
-        updateScreen("")
+
+        expression = (screen as EditText).text.toString().dropLast(1)
+        (screen as EditText).setText(expression)
     }
 
     private fun onLongClickDelete(view: View): Boolean {
@@ -95,7 +103,13 @@ class BasicModeFragment : Fragment() {
 
         for (item in clickableViews) {
             item?.setOnClickListener {
-                if(needClear) clear()
+                if(needClear)
+                {
+                    screen?.setText("")
+                    expression = ""
+                    needClear = false
+                    (activity as DataInterface).setResult(needClear)
+                }
                 updateScreen((it as TextView).text.toString())
             }
         }
@@ -108,10 +122,12 @@ class BasicModeFragment : Fragment() {
         val check = e.validate()
         if (check.isValid) {
             expression = e.evaluate().toString()
+            screen.setText(expression)
         } else {
             expression = check.errors.joinToString(", ")
-            updateScreen("")
+            screen.setText(expression)
         }
         needClear = true
+        (activity as DataInterface).setResult(needClear)
     }
 }
