@@ -11,12 +11,6 @@ import android.widget.TextView
 import net.objecthunter.exp4j.ExpressionBuilder
 import java.lang.Exception
 
-
-interface DataInterface {
-    fun setResult(needClear: Boolean)
-}
-
-
 /**
  * A simple [Fragment] subclass.
  */
@@ -73,6 +67,12 @@ class BasicModeFragment : Fragment(), DataInterface {
     private fun onDelete() {
 
         expression = (screen as EditText).text.toString().dropLast(1)
+        val substring = expression.takeLastWhile { it.isLetter() }
+        if(!substring.isEmpty())
+            expression = (screen as EditText).text.toString().dropLast(substring.length+1)
+        val log10test = expression.takeLast(5) == "log10"
+        if(log10test)
+            expression = (screen as EditText).text.toString().dropLast(6)
         (screen as EditText).setText(expression)
     }
 
@@ -127,10 +127,18 @@ class BasicModeFragment : Fragment(), DataInterface {
             val e = ExpressionBuilder(text).build()
             val check = e.validate()
             if (check.isValid) {
-                val result = e.evaluate().toString()
-                HistorySingleton.pages.add(Page(expression, result))
-                expression = result
+                val result = e.evaluate()
+                if(result % 1 == 0.0){
+                    HistorySingleton.pages.add(Page(expression, result.toString()))
+                    expression = result.toInt().toString()
+                    screen.setText(expression)
+                }
+                else {
+                    HistorySingleton.pages.add(Page(expression, result.toString()))
+                    expression = result.toString()
+                }
                 screen.setText(expression)
+
             } else {
                 val errors = check.errors.joinToString(", ")
                 HistorySingleton.pages.add(Page(expression, errors))
