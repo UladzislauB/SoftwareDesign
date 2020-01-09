@@ -9,7 +9,8 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import net.objecthunter.exp4j.ExpressionBuilder
-
+import java.lang.Exception
+import kotlin.math.log
 
 
 /**
@@ -118,14 +119,21 @@ class BasicModeFragment : Fragment(), DataInterface {
 
     private fun Evaluate(screen: View?) {
         val text = (screen as EditText).text.toString()
-        val e = ExpressionBuilder(text).build()
-        val check = e.validate()
-        if (check.isValid) {
-            expression = e.evaluate().toString()
-            screen.setText(expression)
-        } else {
-            expression = check.errors.joinToString(", ")
-            screen.setText(expression)
+        try{
+            val e = ExpressionBuilder(text).build()
+            val check = e.validate()
+            if (check.isValid) {
+                expression = e.evaluate().toString()
+                screen.setText(expression)
+            } else {
+                expression = check.errors.joinToString(", ")
+                screen.setText(expression)
+            }
+
+        }
+        catch (exception: Exception){
+            expression = ""
+            screen.setText("Bad expression")
         }
         needClear = true
         (activity as DataInterface).setResult(needClear)
