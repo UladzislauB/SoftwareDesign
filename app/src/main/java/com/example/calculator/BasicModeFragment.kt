@@ -8,6 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import net.objecthunter.exp4j.ExpressionBuilder
+
+
 
 /**
  * A simple [Fragment] subclass.
@@ -15,7 +18,8 @@ import android.widget.TextView
 class BasicModeFragment : Fragment() {
 
     private var screen: EditText? = null
-    private var expression: String = ""
+    private lateinit var expression: String
+    var needClear: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,29 +28,43 @@ class BasicModeFragment : Fragment() {
         // Inflate the layout for this fragment
         val fragmentView = inflater.inflate(R.layout.fragment_basic_mode, container, false);
         screen = activity?.findViewById(R.id.screen)
-
+        expression = (screen as EditText).text.toString()
         setListeners(fragmentView)
 
         val buttonDelete = fragmentView.findViewById<TextView>(R.id.btn_del)
-        buttonDelete.setOnClickListener { onDelete() }
+        buttonDelete.setOnClickListener {
+            if(needClear) clear()
+            onDelete()
+        }
         buttonDelete.setOnLongClickListener { onLongClickDelete(it) }
+
+        val eq = fragmentView.findViewById<TextView>(R.id.btn_eq)
+        eq.setOnClickListener {
+            Evaluate(screen)
+        }
+
         return fragmentView
     }
 
-                private fun updateScreen(string: String) {
-                    expression += string
-                    screen?.setText(expression)
-                }
+    private fun clear()
+    {
+        expression = ""
+        screen?.setText("")
+    }
+
+    private fun updateScreen(string: String) {
+        expression += string
+        screen?.setText(expression)
+    }
 
     private fun onDelete() {
         expression = expression.dropLast(1)
         updateScreen("")
     }
 
-    private fun onLongClickDelete(view: View): Boolean{
-        if(view.id == R.id.btn_del){
-            expression = ""
-            screen?.setText("")
+    private fun onLongClickDelete(view: View): Boolean {
+        if (view.id == R.id.btn_del) {
+            clear()
             return true
         }
         return false
@@ -77,8 +95,23 @@ class BasicModeFragment : Fragment() {
 
         for (item in clickableViews) {
             item?.setOnClickListener {
+                if(needClear) clear()
                 updateScreen((it as TextView).text.toString())
             }
         }
+    }
+
+
+    private fun Evaluate(screen: View?) {
+        val text = (screen as EditText).text.toString()
+        val e = ExpressionBuilder(text).build()
+        val check = e.validate()
+        if (check.isValid) {
+            expression = e.evaluate().toString()
+        } else {
+            expression = check.errors.joinToString(", ")
+            updateScreen("")
+        }
+        needClear = true
     }
 }

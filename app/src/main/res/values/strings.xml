@@ -15,4 +15,5 @@
     <string name="btn_div">/</string>
     <string name="btn_sub">-</string>
     <string name="btn_add">+</string>
+    <string name="equal">=</string>
 </resources>

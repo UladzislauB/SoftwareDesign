@@ -23,9 +23,9 @@
             android:text="@string/ln" />
 
         <Button
-            android:id="@+id/btn_pi"
+            android:id="@+id/btn_cbrt"
             style="@style/Button"
-            android:text="@string/pi" />
+            android:text="@string/cbrt" />
 
         <Button
             android:id="@+id/btn_sc_op"
@@ -46,9 +46,9 @@
             android:text="@string/cos" />
 
         <Button
-            android:id="@+id/btn_log"
+            android:id="@+id/btn_lg"
             style="@style/Button"
-            android:text="@string/log" />
+            android:text="@string/lg" />
 
         <Button
             android:id="@+id/btn_e"
@@ -69,19 +69,19 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/btn_percent"
+            android:id="@+id/btn_acos"
             style="@style/Button"
-            android:text="@string/percent" />
+            android:text="@string/acos" />
 
         <Button
-            android:id="@+id/btn_fact"
+            android:id="@+id/btn_tan"
             style="@style/Button"
-            android:text="@string/fact" />
+            android:text="@string/tan" />
 
         <Button
-            android:id="@+id/btn_pow"
+            android:id="@+id/btn_asin"
             style="@style/Button"
-            android:text="@string/pow"/>
+            android:text="@string/asin"/>
 
         <Button
             android:id="@+id/btn_sqrt"

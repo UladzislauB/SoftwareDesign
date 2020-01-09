@@ -15,7 +15,8 @@ import android.widget.EditText
 class ScientificModeFragment : Fragment() {
 
     private var screen: EditText? = null
-    private var expression: String = ""
+    private lateinit var expression: String
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,7 +26,7 @@ class ScientificModeFragment : Fragment() {
 
         val fragmentView = inflater.inflate(R.layout.fragment_scientific_mode, container, false);
         screen = activity?.findViewById(R.id.screen)
-
+        expression = (screen as EditText).text.toString()
         setListeners(fragmentView)
         return fragmentView
     }
@@ -35,28 +36,28 @@ class ScientificModeFragment : Fragment() {
         screen?.setText(expression)
     }
 
+
     private fun setListeners(fragmentView: View) {
         val sin = fragmentView.findViewById<Button>(R.id.btn_sin)
         val cos = fragmentView.findViewById<Button>(R.id.btn_cos)
-        val percent = fragmentView.findViewById<Button>(R.id.btn_percent)
-        val log = fragmentView.findViewById<Button>(R.id.btn_log)
+        val cbrt = fragmentView.findViewById<Button>(R.id.btn_cbrt)
+        val lg = fragmentView.findViewById<Button>(R.id.btn_lg)
         val ln = fragmentView.findViewById<Button>(R.id.btn_ln)
-        val fact = fragmentView.findViewById<Button>(R.id.btn_fact)
+        val acos = fragmentView.findViewById<Button>(R.id.btn_acos)
         val sqrt = fragmentView.findViewById<Button>(R.id.btn_sqrt)
-        val pow = fragmentView.findViewById<Button>(R.id.btn_pow)
+        val asin = fragmentView.findViewById<Button>(R.id.btn_asin)
         val exp = fragmentView.findViewById<Button>(R.id.btn_e)
-        val pi = fragmentView.findViewById<Button>(R.id.btn_pi)
+        val tan = fragmentView.findViewById<Button>(R.id.btn_tan)
         val sc_cl = fragmentView.findViewById<Button>(R.id.btn_sc_cl)
         val sc_op = fragmentView.findViewById<Button>(R.id.btn_sc_op)
 
         val clickableViews: List<View> =
-            listOf(sin, cos, percent, log, ln, fact, sqrt, pow, exp, pi, sc_cl, sc_op)
+            listOf(sin, cos, cbrt, lg, ln, acos, sqrt, asin, exp, tan, sc_cl, sc_op)
 
         for (item in clickableViews) {
             item.setOnClickListener {
-                when (item) {
-                    sin, cos, log, ln, exp, sqrt -> updateScreen((item as Button).text.toString() + "(")
-                    else -> updateScreen((item as Button).text.toString())
+                when(item){
+                    cbrt -> updateScreen("cbrt(")
                 }
             }
         }
