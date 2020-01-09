@@ -12,6 +12,11 @@ import net.objecthunter.exp4j.ExpressionBuilder
 import java.lang.Exception
 
 
+interface DataInterface {
+    fun setResult(needClear: Boolean)
+}
+
+
 /**
  * A simple [Fragment] subclass.
  */

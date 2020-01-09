@@ -9,9 +9,6 @@ import androidx.viewpager.widget.ViewPager
 
 
 
-interface DataInterface {
-    fun setResult(needClear: Boolean)
-}
 
 
 class MainActivity : AppCompatActivity(), DataInterface {
