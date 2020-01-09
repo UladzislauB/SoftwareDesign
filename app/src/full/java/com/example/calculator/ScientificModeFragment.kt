@@ -58,6 +58,12 @@ class ScientificModeFragment : Fragment() {
             item.setOnClickListener {
                 when(item){
                     cbrt -> updateScreen("cbrt(")
+                    lg -> updateScreen("log10(")
+                    ln -> updateScreen("log(")
+                    sc_cl -> updateScreen(")")
+                    sc_op -> updateScreen("(")
+                    sqrt -> updateScreen("sqrt(")
+                    else -> updateScreen((item as Button).text.toString())
                 }
             }
         }
