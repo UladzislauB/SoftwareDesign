@@ -10,7 +10,6 @@ import android.widget.EditText
 import android.widget.TextView
 import net.objecthunter.exp4j.ExpressionBuilder
 import java.lang.Exception
-import kotlin.math.log
 
 
 /**
@@ -34,10 +33,12 @@ class BasicModeFragment : Fragment(), DataInterface {
 
         val buttonDelete = fragmentView.findViewById<TextView>(R.id.btn_del)
         buttonDelete.setOnClickListener {
-            if(needClear) clear()
+            if (needClear) clear()
             onDelete()
         }
-        buttonDelete.setOnLongClickListener { onLongClickDelete(it) }
+        buttonDelete.setOnLongClickListener {
+                        onLongClickDelete(it)
+        }
 
         val eq = fragmentView.findViewById<TextView>(R.id.btn_eq)
         eq.setOnClickListener {
@@ -53,8 +54,7 @@ class BasicModeFragment : Fragment(), DataInterface {
         this.needClear = needClear
     }
 
-    private fun clear()
-    {
+    private fun clear() {
         expression = ""
         screen?.setText("")
     }
@@ -104,8 +104,7 @@ class BasicModeFragment : Fragment(), DataInterface {
 
         for (item in clickableViews) {
             item?.setOnClickListener {
-                if(needClear)
-                {
+                if (needClear) {
                     screen?.setText("")
                     expression = ""
                     needClear = false
@@ -119,19 +118,24 @@ class BasicModeFragment : Fragment(), DataInterface {
 
     private fun Evaluate(screen: View?) {
         val text = (screen as EditText).text.toString()
-        try{
+        try {
             val e = ExpressionBuilder(text).build()
             val check = e.validate()
             if (check.isValid) {
-                expression = e.evaluate().toString()
+                val result = e.evaluate().toString()
+                HistorySingleton.pages.add(Page(expression, result))
+                expression = result
                 screen.setText(expression)
             } else {
-                expression = check.errors.joinToString(", ")
+                val errors = check.errors.joinToString(", ")
+                HistorySingleton.pages.add(Page(expression, errors))
+                expression = errors
                 screen.setText(expression)
+
             }
 
-        }
-        catch (exception: Exception){
+        } catch (exception: Exception) {
+            HistorySingleton.pages.add(Page(expression, "Bad expression"))
             expression = ""
             screen.setText("Bad expression")
         }
