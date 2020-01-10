@@ -1,0 +1,34 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:background="@drawable/controls_background">
+
+    <Button
+        android:id="@+id/btn_del"
+        style="@style/ButtonControl"
+        android:text="DEL" />
+
+    <Button
+        android:id="@+id/btn_div"
+        style="@style/ButtonControl"
+        android:text="@string/btn_div"
+        android:textSize="40sp" />
+
+    <Button
+        android:id="@+id/btn_mul"
+        style="@style/ButtonControl"
+        android:text="@string/btn_mul" />
+
+    <Button
+        android:id="@+id/btn_sub"
+        style="@style/ButtonControl"
+        android:text="@string/btn_sub" />
+
+    <Button
+        android:id="@+id/btn_add"
+        style="@style/ButtonControl"
+        android:text="@string/btn_add"
+        android:textSize="32sp" />
+</LinearLayout>

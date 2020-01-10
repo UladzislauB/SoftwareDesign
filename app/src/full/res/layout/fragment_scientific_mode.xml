@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:orientation="horizontal"
+    android:id="@+id/scientificFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/science"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_sin"
+            style="@style/Button"
+            android:text="@string/sin" />
+
+        <Button
+            android:id="@+id/btn_ln"
+            style="@style/Button"
+            android:text="@string/ln" />
+
+        <Button
+            android:id="@+id/btn_cbrt"
+            style="@style/Button"
+            android:text="@string/cbrt" />
+
+        <Button
+            android:id="@+id/btn_sc_op"
+            style="@style/Button"
+            android:text="@string/parenthesis_left" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/science"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_cos"
+            style="@style/Button"
+            android:text="@string/cos" />
+
+        <Button
+            android:id="@+id/btn_lg"
+            style="@style/Button"
+            android:text="@string/lg" />
+
+        <Button
+            android:id="@+id/btn_e"
+            style="@style/Button"
+            android:text="@string/exp" />
+
+        <Button
+            android:id="@+id/btn_sc_cl"
+            style="@style/Button"
+            android:text="@string/parenthesis_right" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/science"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_acos"
+            style="@style/Button"
+            android:text="@string/acos" />
+
+        <Button
+            android:id="@+id/btn_tan"
+            style="@style/Button"
+            android:text="@string/tan" />
+
+        <Button
+            android:id="@+id/btn_asin"
+            style="@style/Button"
+            android:text="@string/asin"/>
+
+        <Button
+            android:id="@+id/btn_sqrt"
+            style="@style/Button"
+            android:text="@string/sqrt" />
+    </LinearLayout>
+
+</LinearLayout>
