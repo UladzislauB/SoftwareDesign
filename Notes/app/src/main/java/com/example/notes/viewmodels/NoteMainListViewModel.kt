@@ -1,6 +1,5 @@
 package com.example.notes.viewmodels
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,8 +9,7 @@ import kotlinx.coroutines.*
 
 
 class NoteMainListViewModel(
-    dataSource: NoteDatabaseDAO,
-    application: Application
+    dataSource: NoteDatabaseDAO
 ) : ViewModel() {
 
     val database = dataSource

@@ -24,5 +24,5 @@ data class Note(
     var change_date: String = title,
 
     @ColumnInfo(name = "color_number")
-    val color_number: Int = 0
+    var color_number: Int = 0
 )

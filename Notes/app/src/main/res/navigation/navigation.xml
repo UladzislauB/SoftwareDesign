@@ -31,5 +31,8 @@
             app:exitAnim="@anim/slide_in_right"
             app:popEnterAnim="@anim/slide_out_left"
             app:popExitAnim="@anim/slide_in_right" />
+        <argument
+            android:name="noteId"
+            app:argType="long" />
     </fragment>
 </navigation>
