@@ -17,6 +17,6 @@ interface TagDatabaseDao {
     @Delete
     fun delete(tag: Tag)
 
-    @Query("SELECT * FROM tags_table ORDER BY title")
+    @Query("SELECT * FROM tags_table ORDER BY title_tag")
     fun getAllTagsByTitle(): LiveData<List<Tag>>
 }

@@ -30,7 +30,7 @@ interface JoinNoteTagDAO {
 
 
     @Query(
-        "SELECT tags_table.tagId, tags_table.title " +
+        "SELECT tags_table.tagId, tags_table.title_tag " +
                 "FROM tags_table J" +
                 "OIN join_note_tag ON join_note_tag.tagId = tags_table.tagId " +
                 "WHERE join_note_tag.noteId = :noteId"
