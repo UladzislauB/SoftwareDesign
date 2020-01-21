@@ -55,9 +55,10 @@ class NoteMainListFragment : Fragment() {
                 this.findNavController()
                     .navigate(
                         NoteMainListFragmentDirections.actionNoteMainListFragmentToNoteDetailFragment(
-                            note.noteId
+                            note.noteId, noteMainListViewModel.tappedCreate
                         )
                     )
+                noteMainListViewModel.finishCreateTapping()
                 noteMainListViewModel.doneNavigating()
             }
         })

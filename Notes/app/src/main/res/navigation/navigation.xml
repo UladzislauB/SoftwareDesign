@@ -34,5 +34,8 @@
         <argument
             android:name="noteId"
             app:argType="long" />
+        <argument
+            android:name="isJustCreated"
+            app:argType="boolean" />
     </fragment>
 </navigation>

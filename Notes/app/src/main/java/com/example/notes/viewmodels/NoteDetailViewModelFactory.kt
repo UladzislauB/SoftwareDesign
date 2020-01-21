@@ -9,6 +9,7 @@ import java.lang.IllegalArgumentException
 
 class NoteDetailViewModelFactory (
     private val noteId: Long,
+    private val isJustCreated: Boolean,
     private val notesSource: NoteDatabaseDAO,
     private val tagsSource: TagDatabaseDao,
     private val joinNoteTagsSource: JoinNoteTagDAO
@@ -18,7 +19,7 @@ class NoteDetailViewModelFactory (
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(NoteDetailViewModel::class.java)) {
-            return NoteDetailViewModel(noteId, notesSource, tagsSource, joinNoteTagsSource) as T
+            return NoteDetailViewModel(noteId, isJustCreated, notesSource, tagsSource, joinNoteTagsSource) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

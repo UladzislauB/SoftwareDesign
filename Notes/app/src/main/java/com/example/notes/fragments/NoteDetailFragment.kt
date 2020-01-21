@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 
 import com.example.notes.R
@@ -42,6 +43,7 @@ class NoteDetailFragment : Fragment() {
         val database = NotesDatabase.getInstance(application)
         val viewModelFactory = NoteDetailViewModelFactory(
             arguments.noteId,
+            arguments.isJustCreated,
             database.noteDatabaseDAO,
             database.tagDatabaseDao,
             database.joinNoteTagDAO
@@ -50,6 +52,14 @@ class NoteDetailFragment : Fragment() {
         // Getting ViewModel instance
         noteDetailViewModel =
             ViewModelProviders.of(this, viewModelFactory).get(NoteDetailViewModel::class.java)
+
+
+        noteDetailViewModel.isJustCreated.observe(this, Observer {
+            if (!it) {
+                binding.editTextTitle.setText(noteDetailViewModel.getTitle())
+                binding.editTextBody.setText(noteDetailViewModel.getBody())
+            }
+        })
 
         return binding.root
     }

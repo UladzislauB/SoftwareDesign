@@ -27,16 +27,23 @@ class NoteMainListViewModel(
     val navigateToNoteDetail: LiveData<Note>
         get() = _navigateToNoteDetail
 
-
     // Call after navigating  to NoteDetailFragment
     fun doneNavigating() {
         _navigateToNoteDetail.value = null
+    }
+
+    var tappedCreate: Boolean = false
+
+    fun finishCreateTapping() {
+        tappedCreate = false
+        val i = 0
     }
 
 
     init {
         initializeLastNote()
     }
+
 
     private fun initializeLastNote() {
         uiScope.launch {
@@ -70,8 +77,9 @@ class NoteMainListViewModel(
             val note = Note()
             insert(note)
             lastNote.value = getLastNote()
+            tappedCreate = true
             // Navigating to NoteDetailFragment
-            _navigateToNoteDetail.value = lastNote.value?:return@launch
+            _navigateToNoteDetail.value = lastNote.value ?: return@launch
         }
     }
 
