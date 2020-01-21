@@ -36,7 +36,7 @@ class NoteDetailViewModel(
         withContext(Dispatchers.IO) {
             val note = sourceNotes.get(noteId)
             if (note.title != title || note.body != body || note.color_number != color_number) {
-                if(title != title) {
+                if(title != "") {
                     note.title = title
                 }
                 note.body = body
