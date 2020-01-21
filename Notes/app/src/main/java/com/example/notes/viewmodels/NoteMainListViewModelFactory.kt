@@ -15,7 +15,7 @@ class NoteMainListViewModelFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(NoteMainListViewModel::class.java)) {
-            return NoteMainListViewModel(dataSource, application) as T
+            return NoteMainListViewModel(dataSource) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

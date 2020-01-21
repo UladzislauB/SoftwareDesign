@@ -21,7 +21,7 @@ interface JoinNoteTagDAO {
 
 
     @Query(
-        "SELECT notes_table.noteId, title, body, date_of_change, color_number " +
+        "SELECT notes_table.noteId, title, body, date_of_change_timestamp, color_number " +
                 "FROM notes_table " +
                 "JOIN join_note_tag ON notes_table.noteId = join_note_tag.noteId " +
                 "WHERE join_note_tag.tagId = :tagId"

@@ -14,7 +14,7 @@ import com.example.notes.models.Tag
 
 @Database(
     entities = [Note::class, Tag::class, JoinNoteTag::class],
-    version = 4,
+    version = 7,
     exportSchema = false
 )
 abstract class NotesDatabase : RoomDatabase() {
@@ -25,8 +25,11 @@ abstract class NotesDatabase : RoomDatabase() {
 
     abstract val joinNoteTagDAO: JoinNoteTagDAO
 
+
+
     companion object {
 
+        @Volatile
         private var INSTANCE: NotesDatabase? = null
 
         fun getInstance(context: Context): NotesDatabase {

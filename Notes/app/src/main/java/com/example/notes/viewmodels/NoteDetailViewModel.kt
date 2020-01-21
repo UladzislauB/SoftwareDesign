@@ -4,8 +4,9 @@ import androidx.lifecycle.ViewModel
 import com.example.notes.dao.JoinNoteTagDAO
 import com.example.notes.dao.NoteDatabaseDAO
 import com.example.notes.dao.TagDatabaseDao
-import com.example.notes.getCurrentTime
+import com.example.notes.utils.getCurrentTime
 import kotlinx.coroutines.*
+import java.sql.Timestamp
 
 class NoteDetailViewModel(
     private val noteId: Long,
@@ -33,12 +34,14 @@ class NoteDetailViewModel(
 
     private suspend fun save(title: String, body: String, color_number: Int) {
         withContext(Dispatchers.IO) {
-            var note = sourceNotes.get(noteId)
+            val note = sourceNotes.get(noteId)
             if (note.title != title || note.body != body || note.color_number != color_number) {
-                note.title = title
+                if(title != title) {
+                    note.title = title
+                }
                 note.body = body
                 note.color_number = color_number
-                note.change_date = getCurrentTime()
+                note.change_date_stamp = System.currentTimeMillis()
                 sourceNotes.update(note)
             }
 

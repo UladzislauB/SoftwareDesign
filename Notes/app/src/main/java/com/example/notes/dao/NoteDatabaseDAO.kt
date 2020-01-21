@@ -13,7 +13,7 @@ interface NoteDatabaseDAO {
     @Update
     fun update(note: Note)
 
-    @Query("SELECT * FROM notes_table WHERE noteId=:key")
+    @Query("SELECT * FROM notes_table WHERE noteId = :key")
     fun get(key: Long): Note
 
     @Query("DELETE FROM notes_table")
@@ -24,4 +24,7 @@ interface NoteDatabaseDAO {
 
     @Query("SELECT * FROM notes_table ORDER BY noteId DESC")
     fun getAllNotes(): LiveData<List<Note>>
+
+    @Query("SELECT * FROM notes_table ORDER BY noteId DESC LIMIT 1")
+    fun getLastNote(): Note?
 }
