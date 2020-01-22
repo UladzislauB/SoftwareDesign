@@ -2,4 +2,5 @@
     <dimen name="fab_margin">32dp</dimen>
     <dimen name="main_padding">16dp</dimen>
     <dimen name="items_margin">4dp</dimen>
+    <dimen name="color_btn_padding_top">4dp</dimen>
 </resources>
