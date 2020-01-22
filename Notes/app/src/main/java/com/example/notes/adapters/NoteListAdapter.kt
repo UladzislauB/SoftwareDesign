@@ -8,23 +8,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.notes.databinding.ListItemNoteBinding
 import com.example.notes.models.Note
 
-class NoteListAdapter : ListAdapter<Note, NoteListAdapter.ViewHolder>(NoteDiffCallback()) {
+class NoteListAdapter(val clickListener: NoteListener) :
+    ListAdapter<Note, NoteListAdapter.ViewHolder>(NoteDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
-        holder.bind(item)
+        holder.bind(getItem(position)!!, clickListener)
     }
 
 
     class ViewHolder private constructor(val binding: ListItemNoteBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Note) {
+        fun bind(
+            item: Note,
+            clickListener: NoteListener
+        ) {
             binding.note = item
+            binding.clickListener = clickListener
+            binding.executePendingBindings()
         }
 
         companion object {
@@ -37,7 +42,7 @@ class NoteListAdapter : ListAdapter<Note, NoteListAdapter.ViewHolder>(NoteDiffCa
     }
 }
 
-class NoteDiffCallback: DiffUtil.ItemCallback<Note>() {
+class NoteDiffCallback : DiffUtil.ItemCallback<Note>() {
 
     override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
         return oldItem.noteId == newItem.noteId
@@ -47,4 +52,8 @@ class NoteDiffCallback: DiffUtil.ItemCallback<Note>() {
         return oldItem == newItem
     }
 
+}
+
+class NoteListener(val clickListener: (noteId: Long) -> Unit) {
+    fun onClick(note: Note) = clickListener(note.noteId)
 }

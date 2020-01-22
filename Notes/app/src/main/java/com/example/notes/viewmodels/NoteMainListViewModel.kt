@@ -23,8 +23,8 @@ class NoteMainListViewModel(
     private var lastNote = MutableLiveData<Note?>()
 
 
-    private val _navigateToNoteDetail = MutableLiveData<Note>()
-    val navigateToNoteDetail: LiveData<Note>
+    private val _navigateToNoteDetail = MutableLiveData<Long>()
+     val navigateToNoteDetail: LiveData<Long>
         get() = _navigateToNoteDetail
 
     // Call after navigating  to NoteDetailFragment
@@ -39,6 +39,10 @@ class NoteMainListViewModel(
         val i = 0
     }
 
+    fun onNoteClicked(noteId: Long) {
+        _navigateToNoteDetail.value = noteId
+        tappedCreate = false
+    }
 
     init {
         initializeLastNote()
@@ -79,7 +83,7 @@ class NoteMainListViewModel(
             lastNote.value = getLastNote()
             tappedCreate = true
             // Navigating to NoteDetailFragment
-            _navigateToNoteDetail.value = lastNote.value ?: return@launch
+            _navigateToNoteDetail.value = lastNote.value?.noteId
         }
     }
 

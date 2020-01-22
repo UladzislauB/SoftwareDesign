@@ -53,13 +53,8 @@ class NoteDetailFragment : Fragment() {
         noteDetailViewModel =
             ViewModelProviders.of(this, viewModelFactory).get(NoteDetailViewModel::class.java)
 
-
-        noteDetailViewModel.isJustCreated.observe(this, Observer {
-            if (!it) {
-                binding.editTextTitle.setText(noteDetailViewModel.getTitle())
-                binding.editTextBody.setText(noteDetailViewModel.getBody())
-            }
-        })
+        binding.viewModel = noteDetailViewModel
+        binding.setLifecycleOwner(this)
 
         return binding.root
     }

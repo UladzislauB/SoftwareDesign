@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <variable
+            name="clickListener"
+            type="com.example.notes.adapters.NoteListener" />
         <variable
             name="note"
             type="com.example.notes.models.Note" />
@@ -14,17 +18,18 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/main_padding"
         android:layout_margin="@dimen/items_margin"
-        android:background="@drawable/tea_rose_bg_item">
+        android:background="@drawable/tea_rose_bg_item"
+        android:onClick="@{() -> clickListener.onClick(note)}">
 
         <TextView
             android:id="@+id/title_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_medium"
-            android:text="@{note.title}"
             tools:text="@string/title"
             android:textColor="@android:color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            app:titleWithNullSafety="@{note}"/>
 
         <TextView
             android:id="@+id/body_text"
@@ -33,6 +38,7 @@
             android:fontFamily="@font/roboto_medium"
             android:text="@{note.body}"
             tools:text="Some text to fill body. Chiza, nice body!"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            app:summaryBody="@{note}"/>
     </LinearLayout>
 </layout>

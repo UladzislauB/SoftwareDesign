@@ -27,4 +27,7 @@ interface NoteDatabaseDAO {
 
     @Query("SELECT * FROM notes_table ORDER BY noteId DESC LIMIT 1")
     fun getLastNote(): Note?
+
+    @Query("SELECT * FROM notes_table WHERE noteId = :id")
+    fun getNoteById(id: Long) : LiveData<Note>
 }

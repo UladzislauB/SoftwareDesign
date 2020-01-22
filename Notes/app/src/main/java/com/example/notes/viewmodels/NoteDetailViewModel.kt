@@ -24,7 +24,10 @@ class NoteDetailViewModel(
     val sourceJoinNoteTag = joinNoteTagsSource
 
     // Note
-    private lateinit var note: Note
+    private var note: LiveData<Note>
+
+    fun getNote() = note
+
 
     // Coroutines variables
     private val viewModelJob = Job()
@@ -35,20 +38,8 @@ class NoteDetailViewModel(
         get() = _isJustCreated
 
     init {
-        instantiatingNote()
+        note = sourceNotes.getNoteById(noteId)
         _isJustCreated.value = isJustCreated
-    }
-
-    fun instantiatingNote() {
-        uiScope.launch {
-            note = getNote()
-        }
-    }
-
-    private suspend fun getNote() : Note {
-        return withContext(Dispatchers.IO) {
-            sourceNotes.get(noteId)
-        }
     }
 
     fun onSaveChanges(title: String, body: String, color_number: Int) {
@@ -60,6 +51,7 @@ class NoteDetailViewModel(
 
     private suspend fun save(title: String, body: String, color_number: Int) {
         withContext(Dispatchers.IO) {
+            val note = sourceNotes.get(noteId)
             if (note.title != title || note.body != body || note.color_number != color_number) {
                 if (title != "") {
                     note.title = title
@@ -69,23 +61,10 @@ class NoteDetailViewModel(
                 note.change_date_stamp = System.currentTimeMillis()
                 sourceNotes.update(note)
             }
-
         }
 
     }
 
-
-    fun getTitle() : String {
-        return note.title
-    }
-
-    fun getBody() : String {
-        return note.body
-    }
-
-    fun getColor(): Int {
-        return note.color_number
-    }
 
     override fun onCleared() {
         super.onCleared()
