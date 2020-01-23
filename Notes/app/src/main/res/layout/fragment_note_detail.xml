@@ -13,9 +13,9 @@
         android:id="@+id/note_detail_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         tools:context=".fragments.NoteDetailFragment"
-        android:padding="@dimen/main_padding">
+        android:padding="@dimen/main_padding"
+        app:colorBackground="@{viewModel.note}">
 
         <EditText
             android:id="@+id/edit_text_title"

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -28,7 +29,9 @@
                     android:layout_margin="5dp"
                     android:background="@drawable/white_color_btn"
                     android:paddingTop="@dimen/color_btn_padding_top"
-                    android:textAlignment="center"/>
+                    android:textAlignment="center"
+                    app:tickText="@{note}"
+                    app:colorNumber="@{0}"/>
 
                 <TextView
                     android:id="@+id/red_violet_btn"
@@ -37,7 +40,9 @@
                     android:layout_margin="5dp"
                     android:background="@drawable/red_violet_color_btn"
                     android:paddingTop="@dimen/color_btn_padding_top"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    app:tickText="@{note}"
+                    app:colorNumber="@{1}"/>
 
                 <TextView
                     android:id="@+id/tea_rose_color_btn"
@@ -46,7 +51,9 @@
                     android:layout_margin="5dp"
                     android:background="@drawable/tea_rose_color_btn"
                     android:paddingTop="@dimen/color_btn_padding_top"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    app:tickText="@{note}"
+                    app:colorNumber="@{2}"/>
 
                 <TextView
                     android:id="@+id/ochre_color_btn"
@@ -55,7 +62,9 @@
                     android:layout_margin="5dp"
                     android:background="@drawable/ochre_color_btn"
                     android:paddingTop="@dimen/color_btn_padding_top"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    app:tickText="@{note}"
+                    app:colorNumber="@{3}"/>
 
                 <TextView
                     android:id="@+id/orange_color_btn"
@@ -64,7 +73,9 @@
                     android:layout_margin="5dp"
                     android:background="@drawable/orange_color_btn"
                     android:paddingTop="@dimen/color_btn_padding_top"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    app:tickText="@{note}"
+                    app:colorNumber="@{4}"/>
 
                 <TextView
                     android:id="@+id/maize_color_btn"
@@ -73,7 +84,9 @@
                     android:layout_margin="5dp"
                     android:background="@drawable/maize_color_btn"
                     android:paddingTop="@dimen/color_btn_padding_top"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    app:tickText="@{note}"
+                    app:colorNumber="@{5}"/>
 
                 <TextView
                     android:id="@+id/electric_lime_color_btn"
@@ -82,7 +95,9 @@
                     android:layout_margin="5dp"
                     android:background="@drawable/electric_lime_color_btn"
                     android:paddingTop="@dimen/color_btn_padding_top"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    app:tickText="@{note}"
+                    app:colorNumber="@{6}"/>
 
                 <TextView
                     android:id="@+id/aquamarine_color_btn"
@@ -91,7 +106,9 @@
                     android:layout_margin="5dp"
                     android:background="@drawable/aquamarine_color_btn"
                     android:paddingTop="@dimen/color_btn_padding_top"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    app:tickText="@{note}"
+                    app:colorNumber="@{7}"/>
 
                 <TextView
                     android:id="@+id/sky_blue_color_btn"
@@ -100,7 +117,9 @@
                     android:layout_margin="5dp"
                     android:background="@drawable/sky_blue_color_btn"
                     android:paddingTop="@dimen/color_btn_padding_top"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    app:tickText="@{note}"
+                    app:colorNumber="@{8}"/>
 
                 <TextView
                     android:id="@+id/blue_green_color_btn"
@@ -109,7 +128,9 @@
                     android:layout_margin="5dp"
                     android:background="@drawable/blue_green_color_btn"
                     android:paddingTop="@dimen/color_btn_padding_top"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    app:tickText="@{note}"
+                    app:colorNumber="@{9}"/>
 
                 <TextView
                     android:id="@+id/lavender_color_btn"
@@ -118,7 +139,9 @@
                     android:layout_margin="5dp"
                     android:background="@drawable/lavender_color_btn"
                     android:paddingTop="@dimen/color_btn_padding_top"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    app:tickText="@{note}"
+                    app:colorNumber="@{10}"/>
 
                 <TextView
                     android:id="@+id/peach_color_btn"
@@ -127,7 +150,9 @@
                     android:layout_margin="5dp"
                     android:background="@drawable/peach_color_btn"
                     android:paddingTop="@dimen/color_btn_padding_top"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    app:tickText="@{note}"
+                    app:colorNumber="@{11}"/>
 
                 <TextView
                     android:id="@+id/silver_color_btn"
@@ -136,7 +161,9 @@
                     android:layout_margin="5dp"
                     android:background="@drawable/silver_color_btn"
                     android:paddingTop="@dimen/color_btn_padding_top"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    app:tickText="@{note}"
+                    app:colorNumber="@{11}"/>
             </LinearLayout>
 
         </HorizontalScrollView>

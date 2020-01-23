@@ -58,19 +58,21 @@ class NoteDetailFragment : Fragment() {
 
 
         // Setting color control handlers
-        binding.include.whiteColorBtn.setOnClickListener { colorBtnClickHandler(0) }
-        binding.include.redVioletBtn.setOnClickListener { colorBtnClickHandler(1) }
-        binding.include.teaRoseColorBtn.setOnClickListener { colorBtnClickHandler(2) }
-        binding.include.ochreColorBtn.setOnClickListener { colorBtnClickHandler(3) }
-        binding.include.orangeColorBtn.setOnClickListener { colorBtnClickHandler(4) }
-        binding.include.maizeColorBtn.setOnClickListener { colorBtnClickHandler(5) }
-        binding.include.electricLimeColorBtn.setOnClickListener { colorBtnClickHandler(6) }
-        binding.include.aquamarineColorBtn.setOnClickListener { colorBtnClickHandler(7) }
-        binding.include.skyBlueColorBtn.setOnClickListener { colorBtnClickHandler(8) }
-        binding.include.blueGreenColorBtn.setOnClickListener { colorBtnClickHandler(9) }
-        binding.include.lavenderColorBtn.setOnClickListener { colorBtnClickHandler(10) }
-        binding.include.peachColorBtn.setOnClickListener { colorBtnClickHandler(11) }
-        binding.include.silverColorBtn.setOnClickListener { colorBtnClickHandler(12) }
+        binding.apply {
+            include.whiteColorBtn.setOnClickListener { colorBtnClickHandler(0) }
+            include.redVioletBtn.setOnClickListener { colorBtnClickHandler(1) }
+            include.teaRoseColorBtn.setOnClickListener { colorBtnClickHandler(2) }
+            include.ochreColorBtn.setOnClickListener { colorBtnClickHandler(3) }
+            include.orangeColorBtn.setOnClickListener { colorBtnClickHandler(4) }
+            include.maizeColorBtn.setOnClickListener { colorBtnClickHandler(5) }
+            include.electricLimeColorBtn.setOnClickListener { colorBtnClickHandler(6) }
+            include.aquamarineColorBtn.setOnClickListener { colorBtnClickHandler(7) }
+            include.skyBlueColorBtn.setOnClickListener { colorBtnClickHandler(8) }
+            include.blueGreenColorBtn.setOnClickListener { colorBtnClickHandler(9) }
+            include.lavenderColorBtn.setOnClickListener { colorBtnClickHandler(10) }
+            include.peachColorBtn.setOnClickListener { colorBtnClickHandler(11) }
+            include.silverColorBtn.setOnClickListener { colorBtnClickHandler(12) }
+        }
 
 
 
@@ -78,20 +80,24 @@ class NoteDetailFragment : Fragment() {
     }
 
     fun colorBtnClickHandler(number: Int) {
-        binding.include.whiteColorBtn.text = ""
-        binding.include.redVioletBtn.text = ""
-        binding.include.teaRoseColorBtn.text = ""
-        binding.include.ochreColorBtn.text = ""
-        binding.include.orangeColorBtn.text = ""
-        binding.include.maizeColorBtn.text = ""
-        binding.include.electricLimeColorBtn.text = ""
-        binding.include.aquamarineColorBtn.text = ""
-        binding.include.skyBlueColorBtn.text = ""
-        binding.include.blueGreenColorBtn.text = ""
-        binding.include.lavenderColorBtn.text = ""
-        binding.include.peachColorBtn.text = ""
-        binding.include.silverColorBtn.text = ""
 
+        noteDetailViewModel.setColor(number)
+
+        binding.apply {
+            include.whiteColorBtn.text = ""
+            include.redVioletBtn.text = ""
+            include.teaRoseColorBtn.text = ""
+            include.ochreColorBtn.text = ""
+            include.orangeColorBtn.text = ""
+            include.maizeColorBtn.text = ""
+            include.electricLimeColorBtn.text = ""
+            include.aquamarineColorBtn.text = ""
+            include.skyBlueColorBtn.text = ""
+            include.blueGreenColorBtn.text = ""
+            include.lavenderColorBtn.text = ""
+            include.peachColorBtn.text = ""
+            include.silverColorBtn.text = ""
+        }
 
         when (number) {
             0 -> {
@@ -154,8 +160,7 @@ class NoteDetailFragment : Fragment() {
 
         val title: String = binding.editTextTitle.text.toString()
         val body: String = binding.editTextBody.text.toString()
-        val color: Int = 0
-        noteDetailViewModel.onSaveChanges(title, body, color)
+        noteDetailViewModel.onSaveChanges(title, body)
         super.onPause()
     }
 

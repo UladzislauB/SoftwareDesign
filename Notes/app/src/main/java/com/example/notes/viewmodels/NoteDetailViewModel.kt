@@ -7,9 +7,7 @@ import com.example.notes.dao.JoinNoteTagDAO
 import com.example.notes.dao.NoteDatabaseDAO
 import com.example.notes.dao.TagDatabaseDao
 import com.example.notes.models.Note
-import com.example.notes.utils.getCurrentTime
 import kotlinx.coroutines.*
-import java.sql.Timestamp
 
 class NoteDetailViewModel(
     private val noteId: Long,
@@ -28,6 +26,11 @@ class NoteDetailViewModel(
 
     fun getNote() = note
 
+    private var colorNumber: Int? = null
+
+    fun setColor(value: Int) {
+        colorNumber = value
+    }
 
     // Coroutines variables
     private val viewModelJob = Job()
@@ -42,22 +45,23 @@ class NoteDetailViewModel(
         _isJustCreated.value = isJustCreated
     }
 
-    fun onSaveChanges(title: String, body: String, color_number: Int) {
+    fun onSaveChanges(title: String, body: String) {
         uiScope.launch {
-            save(title, body, color_number)
+            save(title, body)
         }
     }
 
-
-    private suspend fun save(title: String, body: String, color_number: Int) {
+    private suspend fun save(title: String, body: String) {
         withContext(Dispatchers.IO) {
             val note = sourceNotes.get(noteId)
-            if (note.title != title || note.body != body || note.color_number != color_number) {
+            if (note.title != title || note.body != body || note.color_number != colorNumber) {
                 if (title != "") {
                     note.title = title
                 }
                 note.body = body
-                note.color_number = color_number
+                if (colorNumber != null) {
+                    note.color_number = colorNumber as Int
+                }
                 note.change_date_stamp = System.currentTimeMillis()
                 sourceNotes.update(note)
             }

@@ -18,8 +18,8 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/main_padding"
         android:layout_margin="@dimen/items_margin"
-        android:background="@drawable/tea_rose_bg_item"
-        android:onClick="@{() -> clickListener.onClick(note)}">
+        android:onClick="@{() -> clickListener.onClick(note)}"
+        app:drawableBackground="@{note}">
 
         <TextView
             android:id="@+id/title_text"
