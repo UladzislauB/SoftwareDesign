@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.notes.dao.NoteDatabaseDAO
 import com.example.notes.models.Note
-import com.example.notes.utils.getCurrentTime
 import kotlinx.coroutines.*
 
 
@@ -19,12 +18,12 @@ class NoteMainListViewModel(
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    val notes = database.getAllNotes()
+    lateinit var notes: LiveData<List<Note>>
     private var lastNote = MutableLiveData<Note?>()
 
 
     private val _navigateToNoteDetail = MutableLiveData<Long>()
-     val navigateToNoteDetail: LiveData<Long>
+    val navigateToNoteDetail: LiveData<Long>
         get() = _navigateToNoteDetail
 
     // Call after navigating  to NoteDetailFragment
@@ -45,6 +44,7 @@ class NoteMainListViewModel(
     }
 
     init {
+        notes = database.getAllNotes()
         initializeLastNote()
     }
 
@@ -93,6 +93,18 @@ class NoteMainListViewModel(
         }
     }
 
+    fun onSortByTitle() {
+        uiScope.launch {
+            sortByTitle()
+        }
+        val i = 0
+    }
+
+    private suspend fun sortByTitle() {
+        withContext(Dispatchers.IO) {
+            notes = database.sortNotesByTitle()
+        }
+    }
 
     override fun onCleared() {
         super.onCleared()

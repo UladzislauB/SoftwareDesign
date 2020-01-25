@@ -3,10 +3,8 @@ package com.example.notes.fragments
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -22,10 +20,20 @@ import com.example.notes.databinding.FragmentNoteMainListBinding
 import com.example.notes.viewmodels.NoteMainListViewModel
 import com.example.notes.viewmodels.NoteMainListViewModelFactory
 
+
 /**
  * A simple [Fragment] subclass.
  */
 class NoteMainListFragment : Fragment() {
+
+    private lateinit var noteMainListViewModel: NoteMainListViewModel
+
+    private lateinit var adapter: NoteListAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setHasOptionsMenu(true)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,14 +44,13 @@ class NoteMainListFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_note_main_list, container, false)
 
         val application = requireNotNull(this.activity).application
-
         // Create an instance of ViewModelFactory
         val dataSource = NotesDatabase.getInstance(application).noteDatabaseDAO
         val viewModelFactory = NoteMainListViewModelFactory(dataSource, application)
 
 
         // Reference to the ViewModel
-        val noteMainListViewModel = ViewModelProviders.of(
+        noteMainListViewModel = ViewModelProviders.of(
             this, viewModelFactory
         ).get(NoteMainListViewModel::class.java)
 
@@ -69,7 +76,7 @@ class NoteMainListFragment : Fragment() {
 
 
         // Instantiating RecyclerView with all notes
-        val adapter = NoteListAdapter(NoteListener { noteId ->
+        adapter = NoteListAdapter(NoteListener { noteId ->
             Toast.makeText(context, "${noteId}", Toast.LENGTH_SHORT).show()
             noteMainListViewModel.onNoteClicked(noteId)
         })
@@ -100,4 +107,18 @@ class NoteMainListFragment : Fragment() {
     }
 
 
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.menu_fragment_list, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId) {
+            R.id.action_sort_title -> {
+                noteMainListViewModel.onSortByTitle()
+
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }
