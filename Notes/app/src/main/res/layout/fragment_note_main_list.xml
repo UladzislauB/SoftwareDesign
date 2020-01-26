@@ -31,11 +31,5 @@
             android:backgroundTint="@color/white"
             android:onClick="@{() -> viewModel.onCreate()}"
             app:srcCompat="@drawable/ic_create_24px" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:onClick="@{() -> viewModel.onClear()}" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -3,7 +3,7 @@ package com.example.notes.models
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.notes.utils.getCurrentTime
+import com.example.notes.utils.formatToDateString
 
 
 @Entity(tableName = "notes_table")
@@ -16,7 +16,7 @@ data class Note(
     var change_date_stamp: Long = System.currentTimeMillis(),
 
     @ColumnInfo(name = "title")
-    var title: String = getCurrentTime(change_date_stamp),
+    var title: String = formatToDateString(change_date_stamp),
 
     @ColumnInfo(name = "body")
     var body: String = "",

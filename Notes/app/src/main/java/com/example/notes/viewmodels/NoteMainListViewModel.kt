@@ -3,9 +3,11 @@ package com.example.notes.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.notes.adapters.NoteComparators
 import com.example.notes.dao.NoteDatabaseDAO
 import com.example.notes.models.Note
 import kotlinx.coroutines.*
+import java.util.*
 
 
 class NoteMainListViewModel(
@@ -18,7 +20,7 @@ class NoteMainListViewModel(
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    lateinit var notes: LiveData<List<Note>>
+    var notes: LiveData<List<Note>>
     private var lastNote = MutableLiveData<Note?>()
 
 
@@ -94,16 +96,15 @@ class NoteMainListViewModel(
     }
 
     fun onSortByTitle() {
-        uiScope.launch {
-            sortByTitle()
-        }
-        val i = 0
+        Collections.sort(notes.value!!, NoteComparators.TitleComparator())
     }
 
-    private suspend fun sortByTitle() {
-        withContext(Dispatchers.IO) {
-            notes = database.sortNotesByTitle()
-        }
+    fun onSortByDateChange() {
+        Collections.sort(notes.value!!, NoteComparators.DateChangeComparator())
+    }
+
+    fun onNormalOrder() {
+        Collections.sort(notes.value!!, NoteComparators.IdComparator())
     }
 
     override fun onCleared() {

@@ -90,3 +90,11 @@ fun TextView.setStartColor(item: Note?, number: Int) {
         }
     }
 }
+
+
+@BindingAdapter("lastEditText")
+fun TextView.setLastEditText(item: Note?) {
+    item?.let {
+        text = "Edited: " + formatToDateString(item.change_date_stamp)
+    }
+}

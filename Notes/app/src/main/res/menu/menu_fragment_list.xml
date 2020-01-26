@@ -8,9 +8,12 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_sort_date"
+        android:id="@+id/action_sort_date_change"
         android:title="@string/sort_date"
         app:showAsAction="never" />
+    <item android:id="@+id/action_sort_id"
+        android:title="@string/normal_order"
+        app:showAsAction="never"/>
     <item
         android:id="@+id/action_delete"
         android:icon="@drawable/ic_delete_24px"

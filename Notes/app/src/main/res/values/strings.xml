@@ -9,4 +9,5 @@
     <string name="sort_date">Sort By Date</string>
     <string name="note">Note</string>
     <string name="delete_all_notes">Delete all notes</string>
+    <string name="normal_order">Normal Order</string>
 </resources>

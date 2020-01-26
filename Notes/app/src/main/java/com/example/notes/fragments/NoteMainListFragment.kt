@@ -30,6 +30,8 @@ class NoteMainListFragment : Fragment() {
 
     private lateinit var adapter: NoteListAdapter
 
+    private lateinit var binding: FragmentNoteMainListBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
         super.onCreate(savedInstanceState)
@@ -40,7 +42,7 @@ class NoteMainListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val binding: FragmentNoteMainListBinding =
+        binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_note_main_list, container, false)
 
         val application = requireNotNull(this.activity).application
@@ -77,7 +79,6 @@ class NoteMainListFragment : Fragment() {
 
         // Instantiating RecyclerView with all notes
         adapter = NoteListAdapter(NoteListener { noteId ->
-            Toast.makeText(context, "${noteId}", Toast.LENGTH_SHORT).show()
             noteMainListViewModel.onNoteClicked(noteId)
         })
         binding.notesList.adapter = adapter
@@ -113,10 +114,21 @@ class NoteMainListFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item?.itemId) {
+        when (item?.itemId) {
             R.id.action_sort_title -> {
                 noteMainListViewModel.onSortByTitle()
-
+                adapter.notifyDataSetChanged()
+            }
+            R.id.action_sort_date_change -> {
+                noteMainListViewModel.onSortByDateChange()
+                adapter.notifyDataSetChanged()
+            }
+            R.id.action_sort_id -> {
+                noteMainListViewModel.onNormalOrder()
+                adapter.notifyDataSetChanged()
+            }
+            R.id.action_delete -> {
+                noteMainListViewModel.onClear()
             }
         }
         return super.onOptionsItemSelected(item)
