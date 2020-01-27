@@ -11,4 +11,5 @@
     <string name="delete_all_notes">Delete all notes</string>
     <string name="normal_order">Normal Order</string>
     <string name="add">ADD</string>
+    <string name="label_icon">label icon</string>
 </resources>
