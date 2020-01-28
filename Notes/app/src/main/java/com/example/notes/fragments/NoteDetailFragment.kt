@@ -3,13 +3,12 @@ package com.example.notes.fragments
 
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 
 import com.example.notes.R
 import com.example.notes.database.NotesDatabase
@@ -26,6 +25,13 @@ class NoteDetailFragment : Fragment() {
 
     private lateinit var noteDetailViewModel: NoteDetailViewModel
 
+    private lateinit var arguments: NoteDetailFragmentArgs
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setHasOptionsMenu(true)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,7 +43,7 @@ class NoteDetailFragment : Fragment() {
         val application = requireNotNull(this.activity).application
 
         // Getting noteId from Bundle
-        val arguments = NoteDetailFragmentArgs.fromBundle(arguments)
+        arguments = NoteDetailFragmentArgs.fromBundle(getArguments())
 
         // Instantiating ViewModelFactory
         val database = NotesDatabase.getInstance(application)
@@ -153,6 +159,25 @@ class NoteDetailFragment : Fragment() {
                 binding.noteDetailLayout.setBackgroundResource(R.color.silver)
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.menu_fragment_note_detail, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.action_tags -> {
+                findNavController().navigate(
+                    NoteDetailFragmentDirections.actionNoteDetailFragmentToTagListFragment(
+                        arguments.noteId
+                    )
+                )
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onPause() {

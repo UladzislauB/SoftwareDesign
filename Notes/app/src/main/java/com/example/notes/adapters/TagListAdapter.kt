@@ -1,21 +1,17 @@
 package com.example.notes.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notes.databinding.ListItemTagBinding
 import com.example.notes.models.Tag
-import java.util.*
 import kotlin.collections.ArrayList
 
 class TagListAdapter(
-    private var context: Context,
-    private var tagList: ArrayList<Tag>
+    private var tagList: MutableList<Tag>
 ) : RecyclerView.Adapter<TagListAdapter.ViewHolder>(), Filterable {
 
     private var tagListFiltered = tagList
@@ -58,13 +54,13 @@ class TagListAdapter(
                 charSequence: CharSequence,
                 filterResults: FilterResults
             ) {
-                tagListFiltered = filterResults.values as ArrayList<Tag>
+                tagListFiltered = filterResults.values as MutableList<Tag>
                 notifyDataSetChanged()
             }
         }
     }
 
-    fun updateList(newList: ArrayList<Tag>) {
+    fun updateList(newList: MutableList<Tag>) {
         val diffResult = DiffUtil.calculateDiff(TagDiffCallback(this.tagListFiltered, newList))
         this.tagListFiltered.clear()
         this.tagListFiltered.addAll(newList)
@@ -91,11 +87,11 @@ class TagListAdapter(
 }
 
 
-class TagDiffCallback(var newTags: ArrayList<Tag>, var oldTags: ArrayList<Tag>) : DiffUtil.Callback() {
+class TagDiffCallback(var newTags: List<Tag>, var oldTags: List<Tag>) : DiffUtil.Callback() {
 
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldTags.get(oldItemPosition).tagId == newTags.get(newItemPosition).tagId
+        return oldTags[oldItemPosition].tagId == newTags[newItemPosition].tagId
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {

@@ -12,4 +12,6 @@
     <string name="normal_order">Normal Order</string>
     <string name="add">ADD</string>
     <string name="label_icon">label icon</string>
+    <string name="search">Search</string>
+    <string name="label">Label</string>
 </resources>

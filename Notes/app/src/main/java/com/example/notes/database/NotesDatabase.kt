@@ -14,7 +14,7 @@ import com.example.notes.models.Tag
 
 @Database(
     entities = [Note::class, Tag::class, JoinNoteTag::class],
-    version = 9,
+    version = 11,
     exportSchema = false
 )
 abstract class NotesDatabase : RoomDatabase() {
