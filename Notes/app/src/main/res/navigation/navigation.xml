@@ -47,5 +47,9 @@
         android:id="@+id/tagListFragment"
         android:name="com.example.notes.fragments.TagListFragment"
         android:label="TagListFragment"
-        tools:layout="@layout/fragment_tag_list" />
+        tools:layout="@layout/fragment_tag_list" >
+        <argument
+            android:name="noteId"
+            app:argType="long" />
+    </fragment>
 </navigation>
