@@ -1,5 +1,6 @@
 package com.example.notes.viewmodels
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.notes.dao.JoinNoteTagDAO
 import com.example.notes.dao.TagDatabaseDao
@@ -21,11 +22,22 @@ class TagListViewModel(
     private var uiScope = CoroutineScope(Dispatchers.Main+viewModelJob)
 
     var tags = tagSource.getAllTagsByTitle()
+    private var lastTag = MutableLiveData<Tag?>()
 
-    private suspend fun insert(tag: Tag) {
+    private suspend fun insertTag(tag: Tag) {
         withContext(Dispatchers.IO) {
             tagSource.insert(tag)
-            val join = JoinNoteTag(noteId = noteId, tagId = tag.tagId)
+        }
+    }
+
+    private suspend fun getLastTag(): Tag? {
+        return withContext(Dispatchers.IO) {
+            tagSource.getLastTag()
+        }
+    }
+
+    private suspend fun insertJoin(join: JoinNoteTag) {
+        withContext(Dispatchers.IO) {
             joinSource.insert(join)
         }
     }
@@ -33,7 +45,10 @@ class TagListViewModel(
     fun onCreate(title: String) {
         uiScope.launch {
             val tag = Tag(title = title)
-            insert(tag)
+            insertTag(tag)
+            lastTag.value = getLastTag()
+            val join = JoinNoteTag(noteId = noteId, tagId = lastTag.value!!.tagId)
+            insertJoin(join)
         }
     }
 }

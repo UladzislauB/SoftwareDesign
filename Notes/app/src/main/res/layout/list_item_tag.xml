@@ -17,10 +17,13 @@
             android:id="@+id/labelImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:contentDescription="@string/label_icon"
             android:padding="@dimen/main_padding"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tagName"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_label_24px" />
@@ -29,16 +32,15 @@
             android:id="@+id/tagName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="241dp"
             android:padding="@dimen/main_padding"
             android:textAlignment="textStart"
             android:textColor="@android:color/black"
             android:textSize="18sp"
-            app:tagTitle="@{tag}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tagCheckbox"
             app:layout_constraintStart_toEndOf="@+id/labelImage"
             app:layout_constraintTop_toTopOf="parent"
+            app:tagTitle="@{tag}"
             tools:text="@string/title" />
 
         <CheckBox
@@ -46,11 +48,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="32dp"
             android:layout_marginBottom="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tagName"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
