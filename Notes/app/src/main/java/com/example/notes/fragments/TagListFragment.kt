@@ -60,17 +60,17 @@ class TagListFragment : Fragment() {
 
         binding.addTagBtn.visibility = View.GONE
 
-
-
         var isInstantiated = false
 
         tagListViewModel.tags.observe(this, Observer {
             if (!isInstantiated) {
-                adapter = TagListAdapter(tagListViewModel.tags.value!!)
+                adapter = TagListAdapter(it)
                 binding.tagList.adapter = adapter
                 isInstantiated = true
+            } else {
+                adapter.updateTagListItems(it)
             }
-            adapter.notifyDataSetChanged()
+
         })
 
 

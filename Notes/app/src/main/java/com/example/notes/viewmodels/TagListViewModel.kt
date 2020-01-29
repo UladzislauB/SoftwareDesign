@@ -43,13 +43,19 @@ class TagListViewModel(
         }
     }
 
+    private fun createTagCheck(title: String) : Boolean {
+        return tags.value?.find { it.title == title } == null
+    }
+
     fun onCreate(title: String) {
-        uiScope.launch {
-            val tag = Tag(title = title)
-            insertTag(tag)
-            lastTag.value = getLastTag()
-            val join = JoinNoteTag(noteId = noteId, tagId = lastTag.value!!.tagId)
-            insertJoin(join)
+        if (createTagCheck(title)) {
+            uiScope.launch {
+                val tag = Tag(title = title)
+                insertTag(tag)
+                lastTag.value = getLastTag()
+                val join = JoinNoteTag(noteId = noteId, tagId = lastTag.value!!.tagId)
+                insertJoin(join)
+            }
         }
     }
 }
