@@ -25,6 +25,8 @@ class TagListViewModel(
     var tags = tagSource.getAllTagsByTitle()
     private var lastTag = MutableLiveData<Tag?>()
 
+    var searchQuery: String = ""
+
     private suspend fun insertTag(tag: Tag) {
         withContext(Dispatchers.IO) {
             tagSource.insert(tag)

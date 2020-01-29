@@ -4,7 +4,6 @@ package com.example.notes.fragments
 import android.os.Bundle
 import android.view.*
 import android.widget.SearchView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -81,6 +80,15 @@ class TagListFragment : Fragment() {
         inflater?.inflate(R.menu.menu_fragment_tag_list, menu)
         val searchView = menu?.findItem(R.id.tag_search)?.actionView as SearchView
 
+        val caсhedSearchQuery = tagListViewModel.searchQuery
+
+        if (caсhedSearchQuery.isNotEmpty()) {
+            searchView.setQuery(caсhedSearchQuery, false)
+            adapter.filter.filter(caсhedSearchQuery)
+            searchView.isFocusable = true
+            searchView.isIconified = false
+        }
+
         searchView.setOnSearchClickListener{
             binding.addTagBtn.visibility = View.VISIBLE
         }
@@ -95,6 +103,7 @@ class TagListFragment : Fragment() {
             override fun onQueryTextChange(query: String): Boolean {
                 // filter recycler view when text is changed
                 adapter.filter.filter(query)
+                tagListViewModel.searchQuery = query
                 return false
             }
         })
@@ -105,7 +114,7 @@ class TagListFragment : Fragment() {
                 tagListViewModel.onCreate(textQuery)
                 searchView.setQuery("", false)
                 searchView.clearFocus()
-                adapter.notifyDataSetChanged()
+                adapter.updateTagListItems(tagListViewModel.tags.value!!)
             }
         }
 
