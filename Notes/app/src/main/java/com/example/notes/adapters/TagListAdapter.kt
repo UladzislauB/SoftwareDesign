@@ -2,6 +2,8 @@ package com.example.notes.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -10,49 +12,55 @@ import com.example.notes.databinding.ListItemTagBinding
 import com.example.notes.models.Tag
 
 
-class TagListAdapter : ListAdapter<Tag, TagListAdapter.ViewHolder>(TagDiffCallback()) {
+class TagListAdapter (
+    private var tagList: List<Tag>
+): RecyclerView.Adapter<TagListAdapter.ViewHolder>(), Filterable {
 
-
+    private var tagLsitFiltered = tagList
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position)!!)
+        holder.bind(tagLsitFiltered[position])
     }
 
-//  override fun getFilter(): Filter {
-//        return object : Filter() {
-//            override fun performFiltering(charSequence: CharSequence): FilterResults {
-//                val charString = charSequence.toString()
-//                if (charString.isEmpty()) {
-//                    tagListFiltered = tagList
-//                } else {
-//                    val filteredList = ArrayList<Tag>()
-//                    for (row in tagList) {
-//                        if (row.title.contains(charString as CharSequence, true)) {
-//                            filteredList.add(row)
-//                        }
-//                    }
-//
-//                    tagListFiltered = filteredList
-//                }
-//
-//                val filterResults = FilterResults()
-//                filterResults.values = tagListFiltered
-//                return filterResults
-//            }
-//
-//            override fun publishResults(
-//                charSequence: CharSequence,
-//                filterResults: FilterResults
-//            ) {
-//                tagListFiltered = filterResults.values as MutableList<Tag>
-//                notifyDataSetChanged()
-//            }
-//        }
-//    }
+    override fun getItemCount(): Int {
+        return tagLsitFiltered.size
+    }
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(charSequence: CharSequence): FilterResults {
+                val charString = charSequence.toString()
+                if (charString.isEmpty()) {
+                    tagLsitFiltered = tagList
+                } else {
+                    val filteredList: ArrayList<Tag> = ArrayList()
+                    for (row in tagList) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.title.contains(charSequence, true)) {
+                            filteredList.add(row)
+                        }
+                    }
+
+                    tagLsitFiltered = filteredList
+                }
+
+                val filterResults = FilterResults()
+                filterResults.values = tagLsitFiltered
+                return filterResults
+            }
+
+            override fun publishResults(charSequence: CharSequence, filterResults: FilterResults) {
+                tagLsitFiltered = filterResults.values as ArrayList<Tag>
+                notifyDataSetChanged()
+            }
+        }
+    }
 
     class ViewHolder private constructor(val binding: ListItemTagBinding) :
         RecyclerView.ViewHolder(binding.root) {

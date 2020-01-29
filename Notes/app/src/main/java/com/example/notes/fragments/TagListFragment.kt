@@ -27,6 +27,8 @@ class TagListFragment : Fragment() {
 
     private lateinit var tagListViewModel: TagListViewModel
 
+    private lateinit var adapter: TagListAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
         super.onCreate(savedInstanceState)
@@ -55,13 +57,20 @@ class TagListFragment : Fragment() {
         binding.viewModel = tagListViewModel
         binding.setLifecycleOwner(this)
 
+
         binding.addTagBtn.visibility = View.GONE
 
-        val adapter = TagListAdapter()
-        binding.tagList.adapter = adapter
+
+
+        var isInstantiated = false
 
         tagListViewModel.tags.observe(this, Observer {
-            adapter.submitList(it)
+            if (!isInstantiated) {
+                adapter = TagListAdapter(tagListViewModel.tags.value!!)
+                binding.tagList.adapter = adapter
+                isInstantiated = true
+            }
+            adapter.notifyDataSetChanged()
         })
 
 
@@ -79,11 +88,13 @@ class TagListFragment : Fragment() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 // filter recycler view when query submitted
+                adapter.filter.filter(query)
                 return false
             }
 
             override fun onQueryTextChange(query: String): Boolean {
                 // filter recycler view when text is changed
+                adapter.filter.filter(query)
                 return false
             }
         })
@@ -94,6 +105,7 @@ class TagListFragment : Fragment() {
                 tagListViewModel.onCreate(textQuery)
                 searchView.setQuery("", false)
                 searchView.clearFocus()
+                adapter.notifyDataSetChanged()
             }
         }
 
