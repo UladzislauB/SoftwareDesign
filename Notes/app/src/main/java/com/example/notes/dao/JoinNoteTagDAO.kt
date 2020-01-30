@@ -31,9 +31,12 @@ interface JoinNoteTagDAO {
 
     @Query(
         "SELECT tags_table.tagId, tags_table.title_tag " +
-                "FROM tags_table J" +
-                "OIN join_note_tag ON join_note_tag.tagId = tags_table.tagId " +
+                "FROM tags_table " +
+                "JOIN join_note_tag ON join_note_tag.tagId = tags_table.tagId " +
                 "WHERE join_note_tag.noteId = :noteId"
     )
     fun getTagsForNote(noteId: Long): LiveData<List<Tag>>
+
+    @Query("SELECT * FROM join_note_tag WHERE tagId = :tagId AND noteId = :noteId")
+    fun getByAtribbutes(tagId: Long, noteId: Long) : JoinNoteTag?
 }

@@ -23,6 +23,7 @@ class TagListViewModel(
     private var uiScope = CoroutineScope(Dispatchers.Main+viewModelJob)
 
     var tags = tagSource.getAllTagsByTitle()
+    var joins = joinSource.getTagsForNote(noteId)
     private var lastTag = MutableLiveData<Tag?>()
 
     var searchQuery: String = ""
@@ -57,6 +58,31 @@ class TagListViewModel(
                 lastTag.value = getLastTag()
                 val join = JoinNoteTag(noteId = noteId, tagId = lastTag.value!!.tagId)
                 insertJoin(join)
+            }
+        }
+    }
+
+
+    private suspend fun findJoinByAtribbutes(tagId: Long, noteId: Long) : JoinNoteTag? {
+        return withContext(Dispatchers.IO) {
+            joinSource.getByAtribbutes(tagId, noteId)
+        }
+    }
+
+    private suspend fun deleteJoin(join: JoinNoteTag) {
+        withContext(Dispatchers.IO) {
+            joinSource.delete(join)
+        }
+    }
+
+    fun onTagClicked(tagId: Long) {
+        uiScope.launch {
+            val join = findJoinByAtribbutes(tagId, noteId)
+            if (join!=null) {
+                deleteJoin(join)
+            } else {
+                val newJoin = JoinNoteTag(tagId = tagId, noteId = noteId)
+                insertJoin(newJoin)
             }
         }
     }

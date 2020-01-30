@@ -7,11 +7,15 @@
         <variable
             name="tag"
             type="com.example.notes.models.Tag" />
+        <variable
+            name="clickListener"
+            type="com.example.notes.adapters.TagListListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> clickListener.onClick(tag)}">
 
         <ImageView
             android:id="@+id/labelImage"

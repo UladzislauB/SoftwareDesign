@@ -9,11 +9,14 @@ import androidx.annotation.Nullable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notes.databinding.ListItemTagBinding
+import com.example.notes.models.JoinNoteTag
 import com.example.notes.models.Tag
 
 
 class TagListAdapter(
-    private var tagList: List<Tag>
+    private var tagList: List<Tag>,
+    private var joinList: List<Tag>,
+    val clickListener: (tagId: Long) -> Unit
 ) : RecyclerView.Adapter<TagListAdapter.ViewHolder>(), Filterable {
 
     private var tagListFiltered = tagList.toMutableList()
@@ -23,7 +26,10 @@ class TagListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(tagListFiltered[position])
+        val item = tagListFiltered[position]
+        val realClickListener = TagListListener(clickListener, holder.binding)
+        holder.bind(item, realClickListener)
+        holder.binding.tagCheckbox.isChecked = joinList.contains(item)
     }
 
     override fun getItemCount(): Int {
@@ -49,13 +55,13 @@ class TagListAdapter(
                         }
                     }
 
-                    filterResults.values =  filteredList
+                    filterResults.values = filteredList
                     return filterResults
                 }
             }
 
             override fun publishResults(charSequence: CharSequence, filterResults: FilterResults) {
-                updateTagListItems( filterResults.values as ArrayList<Tag>)
+                updateTagListItems(filterResults.values as ArrayList<Tag>)
             }
         }
     }
@@ -73,9 +79,10 @@ class TagListAdapter(
     class ViewHolder private constructor(val binding: ListItemTagBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(
-            item: Tag
+            item: Tag, clickListener: TagListListener
         ) {
             binding.tag = item
+            binding.clickListener = clickListener
             binding.executePendingBindings()
         }
 
@@ -117,4 +124,12 @@ class TagDiffCallback(
         return super.getChangePayload(oldPosition, newPosition)
     }
 
+}
+
+
+class TagListListener(val clickListener: (tagId: Long) -> Unit, val binding: ListItemTagBinding) {
+    fun onClick(tag: Tag) {
+        clickListener(tag.tagId)
+        binding.tagCheckbox.toggle()
+    }
 }

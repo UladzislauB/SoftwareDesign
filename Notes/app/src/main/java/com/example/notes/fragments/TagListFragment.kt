@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 
 import com.example.notes.R
 import com.example.notes.adapters.TagListAdapter
+import com.example.notes.adapters.TagListListener
 import com.example.notes.database.NotesDatabase
 import com.example.notes.databinding.FragmentTagListBinding
 import com.example.notes.viewmodels.TagListViewModel
@@ -59,15 +60,34 @@ class TagListFragment : Fragment() {
 
         binding.addTagBtn.visibility = View.GONE
 
-        var isInstantiated = false
+        var areTagsInstantiated = false
+        var areJoinsInstantiated = false
+        var adapterInstantiated = false
+
+        tagListViewModel.joins.observe(this, Observer {
+            if (!areJoinsInstantiated) {
+                areJoinsInstantiated = true
+            }
+            if (areJoinsInstantiated && areTagsInstantiated && !adapterInstantiated) {
+                adapter = TagListAdapter(tagListViewModel.tags.value!!, it) { tagId ->
+                    tagListViewModel.onTagClicked(tagId)
+                }
+                binding.tagList.adapter = adapter
+                adapterInstantiated = true
+            }
+
+        })
 
         tagListViewModel.tags.observe(this, Observer {
-            if (!isInstantiated) {
-                adapter = TagListAdapter(it)
+            if (!areTagsInstantiated) {
+                areTagsInstantiated = true
+            }
+            if (areJoinsInstantiated && areTagsInstantiated && !adapterInstantiated) {
+                adapter = TagListAdapter(it, tagListViewModel.joins.value!!) { tagId ->
+                    tagListViewModel.onTagClicked(tagId)
+                }
                 binding.tagList.adapter = adapter
-                isInstantiated = true
-            } else {
-                adapter.updateTagListItems(it)
+                adapterInstantiated = true
             }
 
         })
@@ -80,16 +100,16 @@ class TagListFragment : Fragment() {
         inflater?.inflate(R.menu.menu_fragment_tag_list, menu)
         val searchView = menu?.findItem(R.id.tag_search)?.actionView as SearchView
 
-        val caсhedSearchQuery = tagListViewModel.searchQuery
+        val cachedSearchQuery = tagListViewModel.searchQuery
 
-        if (caсhedSearchQuery.isNotEmpty()) {
-            searchView.setQuery(caсhedSearchQuery, false)
-            adapter.filter.filter(caсhedSearchQuery)
+        if (cachedSearchQuery.isNotEmpty()) {
+            searchView.setQuery(cachedSearchQuery, false)
+            adapter.filter.filter(cachedSearchQuery)
             searchView.isFocusable = true
             searchView.isIconified = false
         }
 
-        searchView.setOnSearchClickListener{
+        searchView.setOnSearchClickListener {
             binding.addTagBtn.visibility = View.VISIBLE
         }
 
