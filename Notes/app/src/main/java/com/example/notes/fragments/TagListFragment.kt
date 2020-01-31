@@ -4,6 +4,7 @@ package com.example.notes.fragments
 import android.os.Bundle
 import android.view.*
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -11,7 +12,6 @@ import androidx.lifecycle.ViewModelProviders
 
 import com.example.notes.R
 import com.example.notes.adapters.TagListAdapter
-import com.example.notes.adapters.TagListListener
 import com.example.notes.database.NotesDatabase
 import com.example.notes.databinding.FragmentTagListBinding
 import com.example.notes.viewmodels.TagListViewModel
@@ -71,9 +71,14 @@ class TagListFragment : Fragment() {
             if (areJoinsInstantiated && areTagsInstantiated && !adapterInstantiated) {
                 adapter = TagListAdapter(tagListViewModel.tags.value!!, it) { tagId ->
                     tagListViewModel.onTagClicked(tagId)
+                    Toast.makeText(context, "yo", Toast.LENGTH_SHORT).show()
                 }
                 binding.tagList.adapter = adapter
                 adapterInstantiated = true
+            }
+            if (adapterInstantiated) {
+                adapter.updateJoins(it)
+                adapter.updateTagListItems(tagListViewModel.tags.value!!)
             }
 
         })
@@ -85,11 +90,11 @@ class TagListFragment : Fragment() {
             if (areJoinsInstantiated && areTagsInstantiated && !adapterInstantiated) {
                 adapter = TagListAdapter(it, tagListViewModel.joins.value!!) { tagId ->
                     tagListViewModel.onTagClicked(tagId)
+                    Toast.makeText(context, "yo", Toast.LENGTH_SHORT).show()
                 }
                 binding.tagList.adapter = adapter
                 adapterInstantiated = true
             }
-
         })
 
 
@@ -134,7 +139,7 @@ class TagListFragment : Fragment() {
                 tagListViewModel.onCreate(textQuery)
                 searchView.setQuery("", false)
                 searchView.clearFocus()
-                adapter.updateTagListItems(tagListViewModel.tags.value!!)
+                searchView.isIconified = true
             }
         }
 

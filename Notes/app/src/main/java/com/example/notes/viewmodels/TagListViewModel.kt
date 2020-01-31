@@ -78,8 +78,9 @@ class TagListViewModel(
     fun onTagClicked(tagId: Long) {
         uiScope.launch {
             val join = findJoinByAtribbutes(tagId, noteId)
-            if (join!=null) {
+                    if (join!=null) {
                 deleteJoin(join)
+                return@launch
             } else {
                 val newJoin = JoinNoteTag(tagId = tagId, noteId = noteId)
                 insertJoin(newJoin)

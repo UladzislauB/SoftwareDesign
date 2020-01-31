@@ -66,6 +66,10 @@ class TagListAdapter(
         }
     }
 
+    fun updateJoins(joins: List<Tag>) {
+        joinList = joins
+    }
+
     fun updateTagListItems(newTagList: List<Tag>) {
         val diffCallback = TagDiffCallback(tagListFiltered, newTagList)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
