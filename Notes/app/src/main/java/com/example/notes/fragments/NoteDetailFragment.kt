@@ -9,12 +9,16 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.notes.R
 import com.example.notes.database.NotesDatabase
 import com.example.notes.databinding.FragmentNoteDetailBinding
+import com.example.notes.models.Tag
+import com.example.notes.pretty_tag_adapter.PrettyTagAdapter
 import com.example.notes.viewmodels.NoteDetailViewModel
 import com.example.notes.viewmodels.NoteDetailViewModelFactory
+import kotlinx.android.synthetic.main.fragment_note_detail.*
 
 /**
  * A simple [Fragment] subclass.
@@ -40,6 +44,7 @@ class NoteDetailFragment : Fragment() {
         binding =
             DataBindingUtil.inflate(layoutInflater, R.layout.fragment_note_detail, container, false)
 
+
         val application = requireNotNull(this.activity).application
 
         // Getting noteId from Bundle
@@ -62,6 +67,10 @@ class NoteDetailFragment : Fragment() {
         binding.viewModel = noteDetailViewModel
         binding.setLifecycleOwner(this)
 
+        binding.prettyTagList.apply {
+            adapter = PrettyTagAdapter(tagList)
+            layoutManager = LinearLayoutManager(this@NoteDetailFragment.context)
+        }
 
         // Setting color control handlers
         binding.apply {
@@ -79,7 +88,6 @@ class NoteDetailFragment : Fragment() {
             include.peachColorBtn.setOnClickListener { colorBtnClickHandler(11) }
             include.silverColorBtn.setOnClickListener { colorBtnClickHandler(12) }
         }
-
 
 
         return binding.root
@@ -179,6 +187,19 @@ class NoteDetailFragment : Fragment() {
         }
         return super.onOptionsItemSelected(item)
     }
+
+    private val tagList: MutableList<Tag>
+        get() {
+            return mutableListOf(
+                Tag(title = "Exercise"),
+                Tag(title = "Be Cool"),
+                Tag(title = "Floss"),
+                Tag(title = "Read the Sign"),
+                Tag(title = "Meditation"),
+                Tag(title = "Be Cool in an awesome way"),
+                Tag(title = "Go Crazy")
+            )
+        }
 
     override fun onPause() {
         Log.i("NoteDetailFragment", "onPause called")

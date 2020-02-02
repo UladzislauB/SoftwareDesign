@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.notes.viewmodels.NoteDetailViewModel" />
@@ -13,9 +14,9 @@
         android:id="@+id/note_detail_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.NoteDetailFragment"
         android:padding="@dimen/main_padding"
-        app:colorBackground="@{viewModel.note}">
+        app:colorBackground="@{viewModel.note}"
+        tools:context=".fragments.NoteDetailFragment">
 
         <EditText
             android:id="@+id/edit_text_title"
@@ -23,11 +24,11 @@
             android:layout_height="wrap_content"
             android:hint="@string/title"
             android:inputType="text"
+            app:isJustCreated="@{viewModel.isJustCreated}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:titleDetail="@{viewModel.note}"
-            app:isJustCreated="@{viewModel.isJustCreated}"/>
+            app:titleDetail="@{viewModel.note}" />
 
         <EditText
             android:id="@+id/edit_text_body"
@@ -35,25 +36,29 @@
             android:layout_height="wrap_content"
             android:hint="@string/note"
             android:inputType="textMultiLine"
+            app:bodyNoteDetail="@{viewModel.note}"
+            app:isJustCreated="@{viewModel.isJustCreated}"
             app:layout_constraintBottom_toTopOf="@+id/include"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edit_text_title"
-            app:layout_constraintVertical_bias="0.0"
-            app:bodyNoteDetail="@{viewModel.note}"
-            app:isJustCreated="@{viewModel.isJustCreated}"/>
+            app:layout_constraintVertical_bias="0.0" />
 
-        <include
-            android:id="@+id/include"
-            layout="@layout/color_controls"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            app:note="@{viewModel.note}"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/lastEditTxtView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_text_title"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toBottomOf="@+id/edit_text_body">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/prettyTagList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
 
         <TextView
             android:id="@+id/lastEditTxtView"
@@ -66,6 +71,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edit_text_body"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintVertical_bias="1.0"
+            tools:text="Edited"/>
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/color_controls"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_text_title"
+            app:layout_constraintVertical_bias="1.0"
+            app:note="@{viewModel.note}" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

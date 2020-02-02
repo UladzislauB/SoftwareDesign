@@ -3,4 +3,6 @@
     <dimen name="main_padding">16dp</dimen>
     <dimen name="items_margin">4dp</dimen>
     <dimen name="color_btn_padding_top">4dp</dimen>
+    <dimen name="marginTiny">4dp</dimen>
+    <dimen name="marginSmall">8dp</dimen>
 </resources>
