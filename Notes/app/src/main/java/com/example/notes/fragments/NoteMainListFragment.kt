@@ -4,18 +4,23 @@ package com.example.notes.fragments
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.notes.R
+import com.example.notes.adapters.HorizontalTagAdapter
+import com.example.notes.adapters.HorizontalTagListener
 import com.example.notes.adapters.NoteListAdapter
 import com.example.notes.adapters.NoteListener
 import com.example.notes.database.NotesDatabase
 import com.example.notes.databinding.FragmentNoteMainListBinding
+import com.example.notes.models.Tag
 import com.example.notes.viewmodels.NoteMainListViewModel
 import com.example.notes.viewmodels.NoteMainListViewModelFactory
 
@@ -46,8 +51,12 @@ class NoteMainListFragment : Fragment() {
 
         val application = requireNotNull(this.activity).application
         // Create an instance of ViewModelFactory
-        val dataSource = NotesDatabase.getInstance(application).noteDatabaseDAO
-        val viewModelFactory = NoteMainListViewModelFactory(dataSource, application)
+        val database = NotesDatabase.getInstance(application)
+        val viewModelFactory = NoteMainListViewModelFactory(
+            database.noteDatabaseDAO,
+            database.tagDatabaseDao,
+            database.joinNoteTagDAO
+        )
 
 
         // Reference to the ViewModel
@@ -82,7 +91,21 @@ class NoteMainListFragment : Fragment() {
         })
         binding.notesList.adapter = adapter
 
+        val horizontalTagAdapter = HorizontalTagAdapter { tagId ->
+            Toast.makeText(this.context, tagId.toString(), Toast.LENGTH_SHORT).show()
+        }
+        binding.horizontalTagList.apply {
+            adapter = horizontalTagAdapter
+            layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+        }
 
+        noteMainListViewModel.tags.observe(this, Observer {
+            it?.let {
+                val list = mutableListOf<Tag>(Tag(0, "All"))
+                list.addAll(it)
+                horizontalTagAdapter.submitList(list)
+            }
+        })
 
         noteMainListViewModel.notes.observe(this, Observer {
             it?.let {

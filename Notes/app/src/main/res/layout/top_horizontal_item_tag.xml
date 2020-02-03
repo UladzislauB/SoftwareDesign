@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="item"
+            type="com.example.notes.models.Tag" />
+        <variable
+            name="clickListener"
+            type="com.example.notes.adapters.HorizontalTagListener" />
+    </data>
+
+    <TextView
+        android:id="@+id/horizontalTagItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/marginSmall"
+        android:paddingStart="@dimen/main_padding"
+        android:paddingEnd="@dimen/main_padding"
+        android:paddingTop="@dimen/marginSmall"
+        android:paddingBottom="@dimen/marginSmall"
+        android:fontFamily="@font/roboto_medium"
+        android:textSize="16sp"
+        android:background="@drawable/tag_cornered_main_page"
+        android:onClick="@{() -> clickListener.onClick(item)}"
+        app:tagTitle="@{item}"
+        tools:text="android" />
+</layout>

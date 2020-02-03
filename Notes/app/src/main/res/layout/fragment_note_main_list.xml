@@ -15,12 +15,21 @@
         android:layout_height="match_parent"
         tools:context=".fragments.NoteMainListFragment">
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/notesList"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/horizontalTagList"
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/notesList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"

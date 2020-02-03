@@ -4,17 +4,23 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.notes.adapters.NoteComparators
+import com.example.notes.dao.JoinNoteTagDAO
 import com.example.notes.dao.NoteDatabaseDAO
+import com.example.notes.dao.TagDatabaseDao
 import com.example.notes.models.Note
 import kotlinx.coroutines.*
 import java.util.*
 
 
 class NoteMainListViewModel(
-    dataSource: NoteDatabaseDAO
+    dataSource: NoteDatabaseDAO,
+    tagSource: TagDatabaseDao,
+    joinSource: JoinNoteTagDAO
 ) : ViewModel() {
 
     val database = dataSource
+    val tagDatabase = tagSource
+    val joinDatabase = joinSource
 
     // Coroutine variables
     private var viewModelJob = Job()
@@ -22,6 +28,8 @@ class NoteMainListViewModel(
 
     var notes: LiveData<List<Note>>
     private var lastNote = MutableLiveData<Note?>()
+
+    var tags = tagDatabase.getAllTagsByTitle()
 
 
     private val _navigateToNoteDetail = MutableLiveData<Long>()
@@ -37,7 +45,6 @@ class NoteMainListViewModel(
 
     fun finishCreateTapping() {
         tappedCreate = false
-        val i = 0
     }
 
     fun onNoteClicked(noteId: Long) {
