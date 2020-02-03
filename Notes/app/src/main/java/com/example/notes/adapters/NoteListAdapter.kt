@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -15,22 +17,56 @@ import com.example.notes.pretty_tag_adapter.PrettyTagAdapter
 
 class NoteListAdapter(
     val context: Context,
+    private var noteList: List<Note>,
     val clickListener: NoteListener
-    ) : ListAdapter<Note, NoteListAdapter.ViewHolder>(NoteDiffCallback()) {
+    ) : RecyclerView.Adapter<NoteListAdapter.ViewHolder>(), Filterable {
+
+
+    private var noteListFiltered = noteList.toMutableList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position)!!, clickListener)
-        Log.i("NoteListAdapter/I", position.toString() + getItem(position)!!.title)
+        val item = noteListFiltered[position]
+        holder.bind(item, clickListener)
+        Log.i("NoteListAdapter/I", position.toString() + item.title)
 //        holder.binding.itemTagList.apply {
 //            adapter = PrettyTagAdapter(mutableListOf(Tag(title = "anime"), Tag(title = "Japan"), Tag(title = "+3")))
 //            layoutManager = LinearLayoutManager(context)
 //        }
     }
 
+    override fun getItemCount(): Int {
+        return noteListFiltered.size
+    }
+
+    override fun getFilter(): Filter {
+        return object : Filter(){
+            override fun performFiltering(charSequence: CharSequence): FilterResults {
+                val charString = charSequence.toString()
+                val filterResults = FilterResults()
+
+                return filterResults
+            }
+
+            override fun publishResults(constraint: CharSequence, results: FilterResults) {
+
+            }
+
+        }
+    }
+
+    fun updateNoteListItems(newNoteList: List<Note>) {
+        val diffCallback = NoteDiffCallback(noteListFiltered, newNoteList)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+
+        (noteListFiltered as ArrayList<Note>).clear()
+        (noteListFiltered as ArrayList<Note>).addAll(newNoteList)
+
+        diffResult.dispatchUpdatesTo(this)
+    }
 
     class ViewHolder private constructor(val binding: ListItemNoteBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -54,17 +90,28 @@ class NoteListAdapter(
     }
 }
 
-class NoteDiffCallback : DiffUtil.ItemCallback<Note>() {
 
-    override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
-        return oldItem.noteId == newItem.noteId
+class NoteDiffCallback(
+    private val oldNoteList: List<Note>,
+    private val newNoteList: List<Note>
+) : DiffUtil.Callback() {
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldNoteList[oldItemPosition].noteId == newNoteList[newItemPosition].noteId
     }
 
-    override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
-        return oldItem == newItem
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldNoteList[oldItemPosition] == newNoteList[newItemPosition]
     }
 
+    override fun getOldListSize(): Int {
+       return oldNoteList.size
+    }
+
+    override fun getNewListSize(): Int {
+        return newNoteList.size
+    }
 }
+
 
 class NoteListener(val clickListener: (noteId: Long) -> Unit) {
     fun onClick(note: Note) = clickListener(note.noteId)

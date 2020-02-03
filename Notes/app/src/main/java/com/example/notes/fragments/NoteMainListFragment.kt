@@ -85,11 +85,7 @@ class NoteMainListFragment : Fragment() {
         })
 
 
-        // Instantiating RecyclerView with all notes
-        adapter = NoteListAdapter(this.context!!, NoteListener { noteId ->
-            noteMainListViewModel.onNoteClicked(noteId)
-        })
-        binding.notesList.adapter = adapter
+
 
         val horizontalTagAdapter = HorizontalTagAdapter { tagId ->
             Toast.makeText(this.context, tagId.toString(), Toast.LENGTH_SHORT).show()
@@ -107,9 +103,18 @@ class NoteMainListFragment : Fragment() {
             }
         })
 
+        // Instantiating RecyclerView with all notes
+        var isReady = false
+
         noteMainListViewModel.notes.observe(this, Observer {
             it?.let {
-                adapter.submitList(it)
+                if (!isReady) {
+                    adapter = NoteListAdapter(this.context!!, it, NoteListener { noteId ->
+                        noteMainListViewModel.onNoteClicked(noteId)
+                    })
+                    binding.notesList.adapter = adapter
+                } else
+                adapter.updateNoteListItems(it)
             }
         })
 
@@ -139,15 +144,15 @@ class NoteMainListFragment : Fragment() {
         when (item?.itemId) {
             R.id.action_sort_title -> {
                 noteMainListViewModel.onSortByTitle()
-                adapter.notifyDataSetChanged()
+                adapter.updateNoteListItems(noteMainListViewModel.notes.value!!)
             }
             R.id.action_sort_date_change -> {
                 noteMainListViewModel.onSortByDateChange()
-                adapter.notifyDataSetChanged()
+                adapter.updateNoteListItems(noteMainListViewModel.notes.value!!)
             }
             R.id.action_sort_id -> {
                 noteMainListViewModel.onNormalOrder()
-                adapter.notifyDataSetChanged()
+                adapter.updateNoteListItems(noteMainListViewModel.notes.value!!)
             }
             R.id.action_delete_all_notes -> {
                 noteMainListViewModel.onClear()

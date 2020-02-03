@@ -12,7 +12,6 @@ import com.example.notes.models.Tag
 class HorizontalTagAdapter(
     val clickListener: (tagId: Long) -> Unit
 ) : ListAdapter<Tag, HorizontalTagAdapter.ViewHolder>(HorizontalTagDiffCallback()) {
-    
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent, clickListener)
