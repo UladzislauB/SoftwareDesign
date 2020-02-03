@@ -30,34 +30,36 @@
             app:layout_constraintTop_toTopOf="parent"
             app:titleDetail="@{viewModel.note}" />
 
-        <EditText
-            android:id="@+id/edit_text_body"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/note"
-            android:inputType="textMultiLine"
-            app:bodyNoteDetail="@{viewModel.note}"
-            app:isJustCreated="@{viewModel.isJustCreated}"
-            app:layout_constraintBottom_toTopOf="@+id/include"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_text_title"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <LinearLayout
+        <ScrollView
+            android:id="@+id/scrollViewEditNote"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toTopOf="@+id/lastEditTxtView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_text_body">
+            app:layout_constraintTop_toBottomOf="@+id/edit_text_title">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/prettyTagList"
+            <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </LinearLayout>
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/edit_text_body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/note"
+                    android:inputType="textMultiLine"
+                    app:bodyNoteDetail="@{viewModel.note}"
+                    app:isJustCreated="@{viewModel.isJustCreated}" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/prettyTagList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+        </ScrollView>
 
 
         <TextView
@@ -70,9 +72,8 @@
             app:layout_constraintBottom_toTopOf="@+id/include"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_text_body"
-            app:layout_constraintVertical_bias="1.0"
-            tools:text="Edited"/>
+            app:layout_constraintTop_toBottomOf="@+id/scrollViewEditNote"
+            tools:text="Edited" />
 
         <include
             android:id="@+id/include"

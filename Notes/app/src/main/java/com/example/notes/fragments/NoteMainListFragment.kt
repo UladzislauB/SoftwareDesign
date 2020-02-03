@@ -77,7 +77,7 @@ class NoteMainListFragment : Fragment() {
 
 
         // Instantiating RecyclerView with all notes
-        adapter = NoteListAdapter(NoteListener { noteId ->
+        adapter = NoteListAdapter(this.context!!, NoteListener { noteId ->
             noteMainListViewModel.onNoteClicked(noteId)
         })
         binding.notesList.adapter = adapter

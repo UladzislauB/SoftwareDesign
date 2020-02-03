@@ -24,6 +24,8 @@ class NoteDetailViewModel(
     // Note
     private var note: LiveData<Note>
 
+    val tags = sourceJoinNoteTag.getTagsForNote(noteId)
+
     fun getNote() = note
 
     private var colorNumber: Int? = null

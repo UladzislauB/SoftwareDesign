@@ -67,10 +67,12 @@ class NoteDetailFragment : Fragment() {
         binding.viewModel = noteDetailViewModel
         binding.setLifecycleOwner(this)
 
-        binding.prettyTagList.apply {
-            adapter = PrettyTagAdapter(tagList)
-            layoutManager = LinearLayoutManager(this@NoteDetailFragment.context)
-        }
+        noteDetailViewModel.tags.observe(this, Observer {
+            binding.prettyTagList.apply {
+                adapter = PrettyTagAdapter(noteDetailViewModel.tags.value!!.toMutableList())
+                layoutManager = LinearLayoutManager(this@NoteDetailFragment.context)
+            }
+        })
 
         // Setting color control handlers
         binding.apply {
