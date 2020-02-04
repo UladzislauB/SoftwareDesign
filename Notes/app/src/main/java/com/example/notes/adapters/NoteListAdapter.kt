@@ -6,20 +6,19 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.notes.dao.JoinNoteTagDAO
 import com.example.notes.databinding.ListItemNoteBinding
 import com.example.notes.models.Note
-import com.example.notes.models.Tag
-import com.example.notes.pretty_tag_adapter.PrettyTagAdapter
 
 class NoteListAdapter(
     val context: Context,
-    private var noteList: List<Note>,
+    private val noteList: List<Note>,
     val clickListener: NoteListener
-    ) : RecyclerView.Adapter<NoteListAdapter.ViewHolder>(), Filterable {
+) : RecyclerView.Adapter<NoteListAdapter.ViewHolder>() {
 
 
     private var noteListFiltered = noteList.toMutableList()
@@ -40,22 +39,6 @@ class NoteListAdapter(
 
     override fun getItemCount(): Int {
         return noteListFiltered.size
-    }
-
-    override fun getFilter(): Filter {
-        return object : Filter(){
-            override fun performFiltering(charSequence: CharSequence): FilterResults {
-                val charString = charSequence.toString()
-                val filterResults = FilterResults()
-
-                return filterResults
-            }
-
-            override fun publishResults(constraint: CharSequence, results: FilterResults) {
-
-            }
-
-        }
     }
 
     fun updateNoteListItems(newNoteList: List<Note>) {
@@ -104,7 +87,7 @@ class NoteDiffCallback(
     }
 
     override fun getOldListSize(): Int {
-       return oldNoteList.size
+        return oldNoteList.size
     }
 
     override fun getNewListSize(): Int {

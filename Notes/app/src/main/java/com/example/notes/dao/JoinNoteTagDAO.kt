@@ -26,7 +26,7 @@ interface JoinNoteTagDAO {
                 "JOIN join_note_tag ON notes_table.noteId = join_note_tag.noteId " +
                 "WHERE join_note_tag.tagId = :tagId"
     )
-    fun getNotesForTag(tagId: Long): LiveData<List<Note>>
+    fun getNotesForTag(tagId: Long): List<Note>
 
 
     @Query(

@@ -4,7 +4,6 @@ package com.example.notes.fragments
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -15,11 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.notes.R
 import com.example.notes.adapters.HorizontalTagAdapter
-import com.example.notes.adapters.HorizontalTagListener
 import com.example.notes.adapters.NoteListAdapter
 import com.example.notes.adapters.NoteListener
 import com.example.notes.database.NotesDatabase
 import com.example.notes.databinding.FragmentNoteMainListBinding
+import com.example.notes.models.Note
 import com.example.notes.models.Tag
 import com.example.notes.viewmodels.NoteMainListViewModel
 import com.example.notes.viewmodels.NoteMainListViewModelFactory
@@ -85,38 +84,50 @@ class NoteMainListFragment : Fragment() {
         })
 
 
-
-
-        val horizontalTagAdapter = HorizontalTagAdapter { tagId ->
-            Toast.makeText(this.context, tagId.toString(), Toast.LENGTH_SHORT).show()
-        }
-        binding.horizontalTagList.apply {
-            adapter = horizontalTagAdapter
-            layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
-        }
-
-        noteMainListViewModel.tags.observe(this, Observer {
-            it?.let {
-                val list = mutableListOf<Tag>(Tag(0, "All"))
-                list.addAll(it)
-                horizontalTagAdapter.submitList(list)
-            }
-        })
-
         // Instantiating RecyclerView with all notes
         var isReady = false
 
         noteMainListViewModel.notes.observe(this, Observer {
             it?.let {
                 if (!isReady) {
-                    adapter = NoteListAdapter(this.context!!, it, NoteListener { noteId ->
-                        noteMainListViewModel.onNoteClicked(noteId)
-                    })
+                    adapter = NoteListAdapter(
+                        this.context!!,
+                        it,
+                        NoteListener { noteId ->
+                            noteMainListViewModel.onNoteClicked(noteId)
+                        })
                     binding.notesList.adapter = adapter
                 } else
-                adapter.updateNoteListItems(it)
+                    adapter.updateNoteListItems(it)
             }
         })
+
+        // Instantiating of top horizontal RecyclerView with tags
+        val horizontalTagAdapter = HorizontalTagAdapter(this) { tagId ->
+            noteMainListViewModel.onTagsQueryChange(tagId)
+        }
+        binding.horizontalTagList.apply{
+            adapter = horizontalTagAdapter
+            layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+        }
+
+        noteMainListViewModel.tags.observe(this, Observer
+        {
+            it?.let {
+                val list = mutableListOf(Tag(0, "All"))
+                list.addAll(it)
+                horizontalTagAdapter.submitList(list)
+            }
+        })
+
+        noteMainListViewModel.notesFiltered.observe(this, Observer
+        {
+            if (noteMainListViewModel.startSearch)
+                it?.let {
+                    adapter.updateNoteListItems(it)
+                }
+        })
+
 
         // Here we define whether we should use list or grid
         var spanCount: Int

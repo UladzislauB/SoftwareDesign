@@ -2,6 +2,9 @@ package com.example.notes.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -10,21 +13,39 @@ import com.example.notes.databinding.TopHorizontalItemTagBinding
 import com.example.notes.models.Tag
 
 class HorizontalTagAdapter(
+    val lifecycleOwner: LifecycleOwner,
     val clickListener: (tagId: Long) -> Unit
 ) : ListAdapter<Tag, HorizontalTagAdapter.ViewHolder>(HorizontalTagDiffCallback()) {
+
+    companion object {
+        var clicked_tag_id = MutableLiveData<Long>()
+    }
+
+    init {
+        clicked_tag_id.value = 0
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent, clickListener)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position)!!)
+        val item = getItem(position)!!
+        holder.bind(item)
+        clicked_tag_id.observe(lifecycleOwner, Observer {
+            it?.let{
+                if (it == item.tagId)
+                    holder.binding.horizontalTagItem.setBackgroundResource(R.drawable.tag_horizontal_active)
+                else holder.binding.horizontalTagItem.setBackgroundResource(R.drawable.tag_cornered_main_page)
+            }
+        })
     }
 
 
     class ViewHolder private constructor(
         val binding: TopHorizontalItemTagBinding,
-        val clickListener: (tagId: Long) -> Unit) :
+        val clickListener: (tagId: Long) -> Unit
+    ) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(
@@ -64,5 +85,6 @@ class HorizontalTagListener(
 ) {
     fun onClick(tag: Tag) {
         clickListener(tag.tagId)
+        HorizontalTagAdapter.clicked_tag_id.value = tag.tagId
     }
 }

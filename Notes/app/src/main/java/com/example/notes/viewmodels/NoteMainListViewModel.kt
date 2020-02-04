@@ -10,6 +10,7 @@ import com.example.notes.dao.TagDatabaseDao
 import com.example.notes.models.Note
 import kotlinx.coroutines.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class NoteMainListViewModel(
@@ -26,11 +27,15 @@ class NoteMainListViewModel(
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    var notes: LiveData<List<Note>>
+    var notes = database.getAllNotes()
+    var notesFiltered = MutableLiveData<List<Note>>()
+
+    // Use notesFiltered or notes
+    var startSearch: Boolean = false
+
     private var lastNote = MutableLiveData<Note?>()
 
     var tags = tagDatabase.getAllTagsByTitle()
-
 
     private val _navigateToNoteDetail = MutableLiveData<Long>()
     val navigateToNoteDetail: LiveData<Long>
@@ -53,10 +58,8 @@ class NoteMainListViewModel(
     }
 
     init {
-        notes = database.getAllNotes()
         initializeLastNote()
     }
-
 
     private fun initializeLastNote() {
         uiScope.launch {
@@ -84,6 +87,29 @@ class NoteMainListViewModel(
         }
     }
 
+    private suspend fun getNotesForTag(tagId: Long) : List<Note> {
+        return withContext(Dispatchers.IO) {
+            joinDatabase.getNotesForTag(tagId)
+        }
+    }
+
+    private suspend fun getAllNotes() : LiveData<List<Note>> {
+        return withContext(Dispatchers.IO) {
+            database.getAllNotes()
+        }
+    }
+
+    fun onTagsQueryChange(tagId: Long){
+        if (tagId == 0L)
+            uiScope.launch {
+                notesFiltered.value = notes.value
+            }
+        else
+            uiScope.launch {
+                notesFiltered.value = getNotesForTag(tagId)
+            }
+        startSearch = true
+    }
 
     fun onCreate() {
         uiScope.launch {
