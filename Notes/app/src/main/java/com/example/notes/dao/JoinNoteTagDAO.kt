@@ -39,4 +39,7 @@ interface JoinNoteTagDAO {
 
     @Query("SELECT * FROM join_note_tag WHERE tagId = :tagId AND noteId = :noteId")
     fun getByAtribbutes(tagId: Long, noteId: Long) : JoinNoteTag?
+
+    @Query("DELETE FROM join_note_tag")
+    fun clear()
 }

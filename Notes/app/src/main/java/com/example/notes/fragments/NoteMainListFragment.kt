@@ -1,9 +1,12 @@
 package com.example.notes.fragments
 
 
+import android.app.AlertDialog
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -18,7 +21,6 @@ import com.example.notes.adapters.NoteListAdapter
 import com.example.notes.adapters.NoteListener
 import com.example.notes.database.NotesDatabase
 import com.example.notes.databinding.FragmentNoteMainListBinding
-import com.example.notes.models.Note
 import com.example.notes.models.Tag
 import com.example.notes.viewmodels.NoteMainListViewModel
 import com.example.notes.viewmodels.NoteMainListViewModelFactory
@@ -106,7 +108,7 @@ class NoteMainListFragment : Fragment() {
         val horizontalTagAdapter = HorizontalTagAdapter(this) { tagId ->
             noteMainListViewModel.onTagsQueryChange(tagId)
         }
-        binding.horizontalTagList.apply{
+        binding.horizontalTagList.apply {
             adapter = horizontalTagAdapter
             layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
         }
@@ -166,7 +168,19 @@ class NoteMainListFragment : Fragment() {
                 adapter.updateNoteListItems(noteMainListViewModel.notes.value!!)
             }
             R.id.action_delete_all_notes -> {
-                noteMainListViewModel.onClear()
+                val alertDialog = AlertDialog.Builder(this.context).create()
+                with(alertDialog) {
+                    setTitle("Warning")
+                    setMessage("Are you sure you want to delete all notes?")
+                    setButton(AlertDialog.BUTTON_POSITIVE, "Yes") { _, _ ->
+                        noteMainListViewModel.onClear()
+                    }
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No") { _, _ ->
+                        dismiss()
+                    }
+                    show()
+                }
+
             }
         }
         return super.onOptionsItemSelected(item)
