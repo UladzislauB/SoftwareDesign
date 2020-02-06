@@ -174,6 +174,5 @@ class SwipeToDeleteCallback(
 class TagListListener(val clickListener: (tagId: Long) -> Unit, val binding: ListItemTagBinding) {
     fun onClick(tag: Tag) {
         clickListener(tag.tagId)
-        binding.tagCheckbox.toggle()
     }
 }

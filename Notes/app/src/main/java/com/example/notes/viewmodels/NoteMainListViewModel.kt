@@ -30,6 +30,8 @@ class NoteMainListViewModel(
     var notes = database.getAllNotes()
     var notesFiltered = MutableLiveData<List<Note>>()
 
+    var tagIdFilter = 0L
+
     // Use notesFiltered or notes
     var startSearch: Boolean = false
 
@@ -85,6 +87,7 @@ class NoteMainListViewModel(
             uiScope.launch {
                 notesFiltered.value = getNotesForTag(tagId)
             }
+        tagIdFilter = tagId
         startSearch = true
     }
 

@@ -101,6 +101,7 @@ class NoteMainListFragment : Fragment() {
                     binding.notesList.adapter = adapter
                 } else
                     adapter.updateNoteListItems(it)
+                HorizontalTagAdapter.clicked_tag_id.value = 0L
             }
         })
 
@@ -127,6 +128,7 @@ class NoteMainListFragment : Fragment() {
             if (noteMainListViewModel.startSearch)
                 it?.let {
                     adapter.updateNoteListItems(it)
+                    HorizontalTagAdapter.clicked_tag_id.value = noteMainListViewModel.tagIdFilter
                 }
         })
 
