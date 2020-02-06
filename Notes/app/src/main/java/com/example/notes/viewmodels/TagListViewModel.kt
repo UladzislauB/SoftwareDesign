@@ -20,13 +20,15 @@ class TagListViewModel(
 
     // Coroutine variables
     private var viewModelJob = Job()
-    private var uiScope = CoroutineScope(Dispatchers.Main+viewModelJob)
+    private var uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     var tags = tagSource.getAllTagsByTitle()
     var joins = joinSource.getTagsForNote(noteId)
     private var lastTag = MutableLiveData<Tag?>()
 
     var searchQuery: String = ""
+
+    var tagToDelete: Tag? = null
 
     private suspend fun insertTag(tag: Tag) {
         withContext(Dispatchers.IO) {
@@ -46,7 +48,7 @@ class TagListViewModel(
         }
     }
 
-    private fun createTagCheck(title: String) : Boolean {
+    private fun createTagCheck(title: String): Boolean {
         return tags.value?.find { it.title == title } == null
     }
 
@@ -63,7 +65,19 @@ class TagListViewModel(
     }
 
 
-    private suspend fun findJoinByAtribbutes(tagId: Long, noteId: Long) : JoinNoteTag? {
+    fun onTagDelete(tag: Tag?) {
+        uiScope.launch {
+            deleteTag(tag!!)
+        }
+    }
+
+    private suspend fun deleteTag(tag: Tag) {
+        withContext(Dispatchers.IO) {
+            tagSource.delete(tag)
+        }
+    }
+
+    private suspend fun findJoinByAtribbutes(tagId: Long, noteId: Long): JoinNoteTag? {
         return withContext(Dispatchers.IO) {
             joinSource.getByAtribbutes(tagId, noteId)
         }
@@ -78,7 +92,8 @@ class TagListViewModel(
     fun onTagClicked(tagId: Long) {
         uiScope.launch {
             val join = findJoinByAtribbutes(tagId, noteId)
-                    if (join!=null) {
+            if (join != null) {
+
                 deleteJoin(join)
                 return@launch
             } else {
@@ -86,5 +101,10 @@ class TagListViewModel(
                 insertJoin(newJoin)
             }
         }
+    }
+
+    override fun onCleared() {
+        viewModelJob.cancel()
+        super.onCleared()
     }
 }

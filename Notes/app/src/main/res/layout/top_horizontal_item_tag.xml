@@ -19,7 +19,7 @@
         android:layout_margin="@dimen/marginSmall"
         android:paddingStart="@dimen/main_padding"
         android:paddingEnd="@dimen/main_padding"
-        android:paddingTop="@dimen/marginSmall"
+        android:paddingTop="@dimen/marginTiny"
         android:paddingBottom="@dimen/marginSmall"
         android:fontFamily="@font/roboto_medium"
         android:textSize="16sp"

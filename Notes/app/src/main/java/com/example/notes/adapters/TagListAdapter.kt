@@ -1,19 +1,26 @@
 package com.example.notes.adapters
 
+import android.content.Context
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.annotation.Nullable
+import androidx.core.content.ContextCompat
 
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.example.notes.R
 import com.example.notes.databinding.ListItemTagBinding
 import com.example.notes.models.JoinNoteTag
 import com.example.notes.models.Tag
 
 
 class TagListAdapter(
+    val context: Context,
     private var tagList: List<Tag>,
     private var joinList: List<Tag>,
     val clickListener: (tagId: Long) -> Unit
@@ -80,6 +87,14 @@ class TagListAdapter(
         diffResult.dispatchUpdatesTo(this)
     }
 
+    fun deleteItem(position: Int) {
+        notifyItemRemoved(position)
+    }
+
+    fun getItem(position: Int) : Tag {
+        return tagListFiltered[position]
+    }
+
     class ViewHolder private constructor(val binding: ListItemTagBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(
@@ -126,6 +141,31 @@ class TagDiffCallback(
     @Nullable
     override fun getChangePayload(oldPosition: Int, newPosition: Int): Any? {
         return super.getChangePayload(oldPosition, newPosition)
+    }
+
+}
+
+
+class SwipeToDeleteCallback(
+    private val adapter: TagListAdapter,
+    private val swipeListener: (tag: Tag) -> Unit) : ItemTouchHelper.SimpleCallback(
+    0,
+    ItemTouchHelper.LEFT
+) {
+
+    override fun onMove(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        target: RecyclerView.ViewHolder
+    ): Boolean {
+        return true
+    }
+
+    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        val position = viewHolder.adapterPosition
+        val item = adapter.getItem(position)
+        swipeListener(item)
+        adapter.deleteItem(position)
     }
 
 }

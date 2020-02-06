@@ -9,8 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.ItemTouchHelper
 
 import com.example.notes.R
+import com.example.notes.adapters.SwipeToDeleteCallback
 import com.example.notes.adapters.TagListAdapter
 import com.example.notes.database.NotesDatabase
 import com.example.notes.databinding.FragmentTagListBinding
@@ -64,34 +66,44 @@ class TagListFragment : Fragment() {
         var areJoinsInstantiated = false
         var adapterInstantiated = false
 
-        tagListViewModel.joins.observe(this, Observer {
+        tagListViewModel.joins.observe(this, Observer { list ->
             if (!areJoinsInstantiated) {
                 areJoinsInstantiated = true
             }
             if (areJoinsInstantiated && areTagsInstantiated && !adapterInstantiated) {
-                adapter = TagListAdapter(tagListViewModel.tags.value!!, it) { tagId ->
+                adapter = TagListAdapter(this.context!!, tagListViewModel.tags.value!!, list) { tagId ->
                     tagListViewModel.onTagClicked(tagId)
                     Toast.makeText(context, "yo", Toast.LENGTH_SHORT).show()
                 }
+                val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(adapter){
+                    tagListViewModel.onTagDelete(it)
+                    adapter.updateTagListItems(tagListViewModel.tags.value!!)
+                })
+                itemTouchHelper.attachToRecyclerView(binding.tagList)
                 binding.tagList.adapter = adapter
                 adapterInstantiated = true
             }
             if (adapterInstantiated) {
-                adapter.updateJoins(it)
+                adapter.updateJoins(list)
                 adapter.updateTagListItems(tagListViewModel.tags.value!!)
             }
 
         })
 
-        tagListViewModel.tags.observe(this, Observer {
+        tagListViewModel.tags.observe(this, Observer { list ->
             if (!areTagsInstantiated) {
                 areTagsInstantiated = true
             }
             if (areJoinsInstantiated && areTagsInstantiated && !adapterInstantiated) {
-                adapter = TagListAdapter(it, tagListViewModel.joins.value!!) { tagId ->
+                adapter = TagListAdapter(this.context!!, list, tagListViewModel.joins.value!!) { tagId ->
                     tagListViewModel.onTagClicked(tagId)
                     Toast.makeText(context, "yo", Toast.LENGTH_SHORT).show()
                 }
+                val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(adapter){
+                    tagListViewModel.onTagDelete(it)
+                    adapter.updateTagListItems(tagListViewModel.tags.value!!)
+                })
+                itemTouchHelper.attachToRecyclerView(binding.tagList)
                 binding.tagList.adapter = adapter
                 adapterInstantiated = true
             }
@@ -145,5 +157,4 @@ class TagListFragment : Fragment() {
 
         super.onCreateOptionsMenu(menu, inflater)
     }
-
 }
