@@ -42,6 +42,9 @@ class NoteDetailViewModel(
     val isJustCreated: LiveData<Boolean>
         get() = _isJustCreated
 
+
+    var startRemoving = false
+
     init {
         note = sourceNotes.getNoteById(noteId)
         _isJustCreated.value = isJustCreated
@@ -69,6 +72,20 @@ class NoteDetailViewModel(
             }
         }
 
+    }
+
+    private suspend fun deleteNote() {
+        withContext(Dispatchers.IO) {
+            sourceNotes.delete(note.value!!)
+            return@withContext
+        }
+    }
+
+    fun onNoteDelete() {
+        uiScope.launch {
+            deleteNote()
+            return@launch
+        }
     }
 
 

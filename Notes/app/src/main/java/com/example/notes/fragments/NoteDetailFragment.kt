@@ -186,29 +186,25 @@ class NoteDetailFragment : Fragment() {
                     )
                 )
             }
+            R.id.action_delete_note -> {
+                findNavController().navigate(
+                    NoteDetailFragmentDirections.actionNoteDetailFragmentToNoteMainListFragment()
+                )
+                noteDetailViewModel.startRemoving = true
+            }
         }
         return super.onOptionsItemSelected(item)
     }
-
-    private val tagList: MutableList<Tag>
-        get() {
-            return mutableListOf(
-                Tag(title = "Exercise"),
-                Tag(title = "Be Cool"),
-                Tag(title = "Floss"),
-                Tag(title = "Read the Sign"),
-                Tag(title = "Meditation"),
-                Tag(title = "Be Cool in an awesome way"),
-                Tag(title = "Go Crazy")
-            )
-        }
 
     override fun onPause() {
         Log.i("NoteDetailFragment", "onPause called")
 
         val title: String = binding.editTextTitle.text.toString()
         val body: String = binding.editTextBody.text.toString()
-        noteDetailViewModel.onSaveChanges(title, body)
+        if (noteDetailViewModel.startRemoving)
+            noteDetailViewModel.onNoteDelete()
+        else
+            noteDetailViewModel.onSaveChanges(title, body)
         super.onPause()
     }
 
