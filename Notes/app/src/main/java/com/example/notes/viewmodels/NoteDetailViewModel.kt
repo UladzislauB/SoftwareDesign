@@ -46,9 +46,33 @@ class NoteDetailViewModel(
     var startRemoving = false
 
     init {
-        note = sourceNotes.getNoteById(noteId)
+        note = if (isJustCreated) {
+            onCreate()
+            sourceNotes.getLastNote()
+        } else
+            sourceNotes.getNoteById(noteId)
         _isJustCreated.value = isJustCreated
     }
+
+    private suspend fun getLastNote(): LiveData<Note> {
+        return withContext(Dispatchers.IO) {
+            sourceNotes.getLastNote()
+        }
+    }
+
+    fun onCreate() {
+        uiScope.launch {
+            val tempNote = Note()
+            insert(tempNote)
+        }
+    }
+
+    private suspend fun insert(note: Note) {
+        withContext(Dispatchers.IO) {
+            sourceNotes.insert(note)
+        }
+    }
+
 
     fun onSaveChanges(title: String, body: String) {
         uiScope.launch {
@@ -58,7 +82,7 @@ class NoteDetailViewModel(
 
     private suspend fun save(title: String, body: String) {
         withContext(Dispatchers.IO) {
-            val note = sourceNotes.get(noteId)
+            val note = note.value!!
             if (note.title != title || note.body != body || note.color_number != colorNumber) {
                 if (title != "") {
                     note.title = title

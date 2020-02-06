@@ -201,6 +201,7 @@ class NoteDetailFragment : Fragment() {
 
         val title: String = binding.editTextTitle.text.toString()
         val body: String = binding.editTextBody.text.toString()
+
         if (noteDetailViewModel.startRemoving)
             noteDetailViewModel.onNoteDelete()
         else

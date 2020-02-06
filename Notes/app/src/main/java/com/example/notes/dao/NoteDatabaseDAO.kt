@@ -32,7 +32,7 @@ interface NoteDatabaseDAO {
     fun sortNotesByDateChange(): LiveData<List<Note>>
 
     @Query("SELECT * FROM notes_table ORDER BY noteId DESC LIMIT 1")
-    fun getLastNote(): Note?
+    fun getLastNote(): LiveData<Note>
 
     @Query("SELECT * FROM notes_table WHERE noteId = :id")
     fun getNoteById(id: Long) : LiveData<Note>

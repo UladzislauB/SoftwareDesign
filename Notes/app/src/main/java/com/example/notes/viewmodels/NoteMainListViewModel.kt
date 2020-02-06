@@ -33,8 +33,6 @@ class NoteMainListViewModel(
     // Use notesFiltered or notes
     var startSearch: Boolean = false
 
-    private var lastNote = MutableLiveData<Note?>()
-
     var tags = tagDatabase.getAllTagsByTitle()
 
     private val _navigateToNoteDetail = MutableLiveData<Long>()
@@ -57,30 +55,8 @@ class NoteMainListViewModel(
         tappedCreate = false
     }
 
-    init {
-        initializeLastNote()
-    }
-
-    private fun initializeLastNote() {
-        uiScope.launch {
-            lastNote.value = getLastNote()
-        }
-    }
 
     // suspended functions
-    private suspend fun getLastNote(): Note? {
-        return withContext(Dispatchers.IO) {
-            database.getLastNote()
-        }
-    }
-
-
-    private suspend fun insert(note: Note) {
-        withContext(Dispatchers.IO) {
-            database.insert(note)
-        }
-    }
-
     private suspend fun clear() {
         withContext(Dispatchers.IO) {
             database.clear()
@@ -114,12 +90,9 @@ class NoteMainListViewModel(
 
     fun onCreate() {
         uiScope.launch {
-            val note = Note()
-            insert(note)
-            lastNote.value = getLastNote()
             tappedCreate = true
             // Navigating to NoteDetailFragment
-            _navigateToNoteDetail.value = lastNote.value?.noteId
+            _navigateToNoteDetail.value = 0L
         }
     }
 
