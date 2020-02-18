@@ -14,6 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/mediumPadding"
+        android:layout_marginStart="@dimen/smallMargin"
+        android:layout_marginEnd="@dimen/smallMargin"
         android:layout_marginBottom="@dimen/mediumMargin"
         app:cardCornerRadius="8dp"
         app:cardElevation="8dp">
@@ -28,25 +30,28 @@
                 android:id="@+id/itemTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:text="Tittle"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:titleFeed="@{item}"
+                tools:text="Tittle" />
 
             <TextView
                 android:id="@+id/itemDateTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:text="2 hours ago"
                 android:textSize="12sp"
-                android:textStyle="italic" />
+                android:textStyle="italic"
+                app:dateFeed="@{item}"
+                tools:text="2 hours ago" />
 
             <TextView
                 android:id="@+id/itemContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:text="Content"
                 android:textSize="14sp"
-                android:textStyle="normal" />
+                android:textStyle="normal"
+                app:contentFeed="@{item}"
+                tools:text="Content" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </layout>
