@@ -1,7 +1,6 @@
 package com.example.yetanotherfeed.models
 
-import java.text.DateFormat
-import java.text.SimpleDateFormat
+import com.example.yetanotherfeed.database.DatabaseItem
 
 data class Item (
     val title: String,
@@ -15,3 +14,16 @@ data class Item (
     val enclosure: Any,
     val categories: List<String>
 )
+
+
+fun List<Item>.asDatabaseModel(): List<DatabaseItem> {
+    return map {
+        DatabaseItem(
+            guid = it.guid,
+            title = it.title,
+            pubDate = it.pubDate,
+            content = it.content,
+            link = it.link
+        )
+    }
+}

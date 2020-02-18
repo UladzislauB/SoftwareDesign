@@ -18,8 +18,24 @@ import com.example.yetanotherfeed.viewmodels.OverviewViewModel
 class OverviewFragment : Fragment() {
 
     private val viewModel: OverviewViewModel by lazy {
-        ViewModelProviders.of(this).get(OverviewViewModel::class.java)
+        val activity = requireNotNull(this.activity) {
+            "You can only access the viewModel after onActivityCreated()"
+        }
+        ViewModelProviders.of(this, OverviewViewModel.Factory(activity.application))
+            .get(OverviewViewModel::class.java)
     }
+
+
+    private var adapter: FeedListAdapter? = null
+
+//    override fun onActivityCreated(savedInstanceState: Bundle?) {
+//        super.onActivityCreated(savedInstanceState)
+//        viewModel.items.observe(viewLifecycleOwner, Observer {
+//            it?.apply {
+//                adapter?.submitList(it)
+//            }
+//        })
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -37,13 +53,11 @@ class OverviewFragment : Fragment() {
 
         binding.feedList.adapter = FeedListAdapter()
 
-        viewModel.rssObject.observe(this, Observer {
-            it?.let {
-                (binding.feedList.adapter as FeedListAdapter).submitList(it.items)
-            }
-        })
-
         binding.setLifecycleOwner(this)
+
+        viewModel.items.observe(this, Observer {
+            (binding.feedList.adapter as FeedListAdapter).submitList(it)
+        })
 
         return binding.root
     }

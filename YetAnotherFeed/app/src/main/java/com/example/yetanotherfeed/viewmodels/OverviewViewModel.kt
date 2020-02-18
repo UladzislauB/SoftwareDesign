@@ -1,38 +1,46 @@
 package com.example.yetanotherfeed.viewmodels
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.yetanotherfeed.models.RssObject
+import androidx.lifecycle.ViewModelProvider
+import com.example.yetanotherfeed.database.getDatabase
 import com.example.yetanotherfeed.network.YetAnotherFeedNetwork
+import com.example.yetanotherfeed.repository.ItemsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.lang.Exception
+import java.io.IOException
 
-class OverviewViewModel : ViewModel() {
+class OverviewViewModel(application: Application) : ViewModel() {
 
-    private val _rssObject = MutableLiveData<RssObject?>()
-    val rssObject: LiveData<RssObject?>
-        get() = _rssObject
-
+    private var _eventNetworkError = MutableLiveData<Boolean>(false)
+    val eventNetworkError: LiveData<Boolean>
+        get() = _eventNetworkError
 
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
+
+    private val itemsRepository = ItemsRepository(getDatabase(application))
+
+    val items = itemsRepository.items
+
+
     init {
-        getRssFeedObject("http://feeds.bbci.co.uk/news/rss.xml")
+        refreshDataFromRepository("https://news.tut.by/rss/index.rss")
     }
 
-    private fun getRssFeedObject(filter: String) {
+    private fun refreshDataFromRepository(filter: String) {
         coroutineScope.launch {
             val getRssObjectDeferred = YetAnotherFeedNetwork.feeds.getFeeds(filter)
             try {
                 val objectResult = getRssObjectDeferred.await()
-                _rssObject.value = objectResult
-            } catch (e: Exception) {
-                _rssObject.value = null
+                itemsRepository.refreshVideos(objectResult.items)
+            } catch (e: IOException) {
+                _eventNetworkError.value = true
             }
         }
     }
@@ -41,5 +49,16 @@ class OverviewViewModel : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
+    }
+
+
+    class Factory(val app: Application) : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(OverviewViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return OverviewViewModel(app) as T
+            }
+            throw IllegalArgumentException("Unable to construct viewmodel")
+        }
     }
 }
