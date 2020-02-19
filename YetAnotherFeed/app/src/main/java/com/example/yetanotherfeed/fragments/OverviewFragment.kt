@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -24,18 +25,6 @@ class OverviewFragment : Fragment() {
         ViewModelProviders.of(this, OverviewViewModel.Factory(activity.application))
             .get(OverviewViewModel::class.java)
     }
-
-
-    private var adapter: FeedListAdapter? = null
-
-//    override fun onActivityCreated(savedInstanceState: Bundle?) {
-//        super.onActivityCreated(savedInstanceState)
-//        viewModel.items.observe(viewLifecycleOwner, Observer {
-//            it?.apply {
-//                adapter?.submitList(it)
-//            }
-//        })
-//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -57,6 +46,11 @@ class OverviewFragment : Fragment() {
 
         viewModel.items.observe(this, Observer {
             (binding.feedList.adapter as FeedListAdapter).submitList(it)
+        })
+
+        viewModel.eventNetworkError.observe(this, Observer {
+            if (it)
+                Toast.makeText(this.context, "Invalid RSS url", Toast.LENGTH_SHORT).show()
         })
 
         return binding.root

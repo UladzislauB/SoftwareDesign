@@ -27,7 +27,7 @@ fun convertMillisToFormatted(pubDateMilli: Long, res: Resources): String {
             res.getString(R.string.hours_length, hours)
         }
         else -> {
-            SimpleDateFormat("MMMM dd HH:mm:ss", Locale.getDefault()).format(pubDateMilli)
+            SimpleDateFormat("MMMM dd HH:mm", Locale.getDefault()).format(pubDateMilli)
                 .toString()
         }
     }

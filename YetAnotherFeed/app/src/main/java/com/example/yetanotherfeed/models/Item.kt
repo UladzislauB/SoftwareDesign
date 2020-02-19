@@ -22,7 +22,7 @@ fun List<Item>.asDatabaseModel(): List<DatabaseItem> {
             guid = it.guid,
             title = it.title,
             pubDate = it.pubDate,
-            content = it.content,
+            content = Regex("\\<.*?\\>").replace(it.content, ""),
             link = it.link
         )
     }
