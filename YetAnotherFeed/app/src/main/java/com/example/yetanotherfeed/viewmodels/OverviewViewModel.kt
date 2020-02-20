@@ -60,6 +60,7 @@ class OverviewViewModel(application: Application) : ViewModel() {
                 try {
                     _status.value = LoadingStatus.LOADING
                     val objectResult = getRssObjectDeferred.await()
+                    _eventNetworkError.value = false
                     _status.value = LoadingStatus.DONE
                     itemsRepository.refreshVideos(objectResult.items)
                     // Save linkRss to SharedPreferences
