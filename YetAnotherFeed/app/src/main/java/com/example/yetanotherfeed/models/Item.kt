@@ -23,7 +23,8 @@ fun List<Item>.asDatabaseModel(): List<DatabaseItem> {
             title = it.title,
             pubDate = it.pubDate,
             content = Regex("\\<.*?\\>").replace(it.content, ""),
-            link = it.link
+            link = it.link,
+            thumbnail = it.thumbnail
         )
     }
 }

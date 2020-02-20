@@ -1,24 +1,31 @@
 package com.example.yetanotherfeed
 
+import android.content.Context
 import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import com.example.yetanotherfeed.network.ConnectivityReceiver
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_main.*
 
 @Suppress("Registered")
 class MainActivity : AppCompatActivity(),
     ConnectivityReceiver.ConnectivityReceiverListener {
+
+    companion object {
+        lateinit var sharedPreferences: SharedPreferences
+    }
+
+    private val APP_PREFERENCES = "mysettings"
 
     private var snackbar: Snackbar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
+        sharedPreferences = getSharedPreferences(APP_PREFERENCES,Context.MODE_PRIVATE)
         supportActionBar?.title = ""
 
         registerReceiver(

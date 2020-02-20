@@ -3,7 +3,10 @@ package com.example.yetanotherfeed.utils
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.yetanotherfeed.R
 import com.example.yetanotherfeed.models.Item
 import com.example.yetanotherfeed.viewmodels.LoadingStatus
@@ -45,5 +48,24 @@ fun bindStatus(statusImageView: ImageView, status: LoadingStatus?) {
         else -> {
             statusImageView.visibility = View.GONE
         }
+    }
+}
+
+
+@BindingAdapter("imageUrl")
+fun bindImage(imageView: ImageView, imageUrl: String?) {
+    imageUrl?.let {
+        if (it.isNotEmpty()) {
+            val imgUri = imageUrl.toUri().buildUpon().scheme("https").build()
+
+            Glide.with(imageView.context)
+                .load(imgUri)
+                .apply(
+                    RequestOptions()
+                        .placeholder(R.drawable.loading_animation)
+                        .error(R.drawable.ic_broken_image))
+                .into(imageView)
+        } else
+            imageView.setImageResource(android.R.color.transparent)
     }
 }

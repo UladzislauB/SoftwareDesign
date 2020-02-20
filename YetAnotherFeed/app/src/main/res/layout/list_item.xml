@@ -5,6 +5,10 @@
 
     <data>
         <variable
+            name="clickListener"
+            type="com.example.yetanotherfeed.adapter.ItemListener" />
+
+        <variable
             name="item"
             type="com.example.yetanotherfeed.models.Item" />
     </data>
@@ -18,40 +22,54 @@
         android:layout_marginEnd="@dimen/smallMargin"
         android:layout_marginBottom="@dimen/mediumMargin"
         app:cardCornerRadius="8dp"
-        app:cardElevation="8dp">
+        app:cardElevation="8dp"
+        android:onClick="@{() -> clickListener.onClick(item)}">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_margin="@dimen/mediumMargin">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/itemTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:titleFeed="@{item}"
-                tools:text="Tittle" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/mediumMargin"
+                android:layout_weight="9"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/itemDateTime"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:textStyle="italic"
-                app:dateFeed="@{item}"
-                tools:text="2 hours ago" />
+                <TextView
+                    android:id="@+id/itemTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:titleFeed="@{item}"
+                    tools:text="Tittle" />
 
-            <TextView
-                android:id="@+id/itemContent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textStyle="normal"
-                app:contentFeed="@{item}"
-                tools:text="Content" />
+                <TextView
+                    android:id="@+id/itemDateTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textStyle="italic"
+                    app:dateFeed="@{item}"
+                    tools:text="2 hours ago" />
+
+                <TextView
+                    android:id="@+id/itemContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    app:contentFeed="@{item}"
+                    tools:text="Content" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:imageUrl="@{item.thumbnail}"
+                tools:src="@drawable/ic_broken_image" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </layout>

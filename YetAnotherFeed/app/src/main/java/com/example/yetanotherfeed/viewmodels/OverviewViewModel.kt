@@ -1,10 +1,12 @@
 package com.example.yetanotherfeed.viewmodels
 
 import android.app.Application
+import android.widget.EditText
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.yetanotherfeed.MainActivity
 import com.example.yetanotherfeed.database.getDatabase
 import com.example.yetanotherfeed.network.YetAnotherFeedNetwork
 import com.example.yetanotherfeed.repository.ItemsRepository
@@ -13,14 +15,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
-import retrofit2.Retrofit
-import java.io.IOException
-import java.lang.Exception
 
 
 enum class LoadingStatus { LOADING, ERROR, DONE }
 
 class OverviewViewModel(application: Application) : ViewModel() {
+
+    private val APP_PREFERENCES_LINK = "linkRss"
+    private lateinit var linkRss: String
 
     private var _eventNetworkError = MutableLiveData<Boolean>(false)
     val eventNetworkError: LiveData<Boolean>
@@ -41,27 +43,42 @@ class OverviewViewModel(application: Application) : ViewModel() {
 
 
     init {
-//        refreshDataFromRepository("https://news.tut.by/rss/index.rss")
-//        refreshDataFromRepository("https://news.tut.by/rss/economics.rss")
-        refreshDataFromRepository("http://feeds.bbci.co.uk/news/rss.xml")
+        linkRss = if (MainActivity.sharedPreferences.contains(APP_PREFERENCES_LINK))
+            MainActivity.sharedPreferences.getString(APP_PREFERENCES_LINK, "")!!
+        else
+            ""
+        refreshDataFromRepository(linkRss)
+//        refreshDataFromRepository("https://news.tut.by/rss/economics.rs`s")
+//        refreshDataFromRepository("http://feeds.bbci.co.uk/news/rss.xml")
 //        refreshDataFromRepository("https://news.tut.by/rss.html")
     }
 
-    private fun refreshDataFromRepository(filter: String) {
-        coroutineScope.launch {
-            val getRssObjectDeferred = YetAnotherFeedNetwork.feeds.getFeeds(filter)
-            try {
-                _status.value = LoadingStatus.LOADING
-                val objectResult = getRssObjectDeferred.await()
-                _status.value = LoadingStatus.DONE
-                itemsRepository.refreshVideos(objectResult.items)
-            } catch (e: HttpException) {
-                _status.value = LoadingStatus.ERROR
-                _eventNetworkError.value = true
-            } catch (e: Exception) {
-                _status.value = LoadingStatus.ERROR
+    fun refreshDataFromRepository(filter: String) {
+        if (filter != "") {
+            coroutineScope.launch {
+                val getRssObjectDeferred = YetAnotherFeedNetwork.feeds.getFeeds(filter)
+                try {
+                    _status.value = LoadingStatus.LOADING
+                    val objectResult = getRssObjectDeferred.await()
+                    _status.value = LoadingStatus.DONE
+                    itemsRepository.refreshVideos(objectResult.items)
+                    // Save linkRss to SharedPreferences
+                    val editor = MainActivity.sharedPreferences.edit()
+                    editor.putString(APP_PREFERENCES_LINK, filter)
+                    editor.apply()
+                } catch (e: HttpException) {
+                    _status.value = LoadingStatus.ERROR
+                    _eventNetworkError.value = true
+                } catch (e: Exception) {
+                    _status.value = LoadingStatus.ERROR
+                }
             }
         }
+    }
+
+    fun instantiateEditTxtView(editText: EditText) {
+        if (linkRss.isNotEmpty())
+            editText.setText(linkRss)
     }
 
 

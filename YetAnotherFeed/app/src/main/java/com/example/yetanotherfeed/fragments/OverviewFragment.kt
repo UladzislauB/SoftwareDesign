@@ -9,7 +9,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.example.yetanotherfeed.adapter.FeedListAdapter
+import com.example.yetanotherfeed.adapter.ItemListener
 import com.example.yetanotherfeed.databinding.FragmentOverviewBinding
 import com.example.yetanotherfeed.viewmodels.OverviewViewModel
 
@@ -40,7 +42,11 @@ class OverviewFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        binding.feedList.adapter = FeedListAdapter()
+        binding.feedList.adapter = FeedListAdapter(ItemListener {
+            findNavController().navigate(
+                OverviewFragmentDirections.actionOverviewFragmentToDetailFragment(it)
+            )
+        })
 
         binding.setLifecycleOwner(this)
 
@@ -52,6 +58,12 @@ class OverviewFragment : Fragment() {
             if (it)
                 Toast.makeText(this.context, "Invalid RSS url", Toast.LENGTH_SHORT).show()
         })
+
+        viewModel.instantiateEditTxtView(binding.editLinkText)
+
+        binding.changeLinkBtn.setOnClickListener {
+            viewModel.refreshDataFromRepository(binding.editLinkText.text.toString())
+        }
 
         return binding.root
     }

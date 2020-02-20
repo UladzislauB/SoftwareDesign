@@ -7,13 +7,13 @@ import androidx.room.*
 @Dao
 interface ItemDAO {
 
-    @Query("SELECT * FROM databaseitem")
+    @Query("SELECT * FROM rss_items_table")
     fun getAllItems(): LiveData<List<DatabaseItem>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(items: List<DatabaseItem>)
 
-    @Query("DELETE FROM databaseitem")
+    @Query("DELETE FROM rss_items_table")
     fun clearData()
 }
 
@@ -32,7 +32,7 @@ fun getDatabase(context: Context): ItemsDatabase {
             INSTANCE = Room.databaseBuilder(
                 context.applicationContext,
                 ItemsDatabase::class.java,
-                "videos"
+                "rss_items"
             ).build()
         }
     }

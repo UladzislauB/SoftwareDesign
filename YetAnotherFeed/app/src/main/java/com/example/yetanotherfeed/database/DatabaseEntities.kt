@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.example.yetanotherfeed.models.Item
 
 
-@Entity
+@Entity(tableName = "rss_items_table")
 data class DatabaseItem(
 
     @PrimaryKey
@@ -17,7 +17,9 @@ data class DatabaseItem(
 
     val content: String,
 
-    val link: String
+    val link: String,
+
+    val thumbnail: String
 )
 
 
@@ -31,7 +33,7 @@ fun List<DatabaseItem>.asDomainModel(): List<Item> {
             link = it.link,
             author = "",
             description = "",
-            thumbnail = "",
+            thumbnail = it.thumbnail,
             categories = ArrayList(),
             enclosure = ""
         )
