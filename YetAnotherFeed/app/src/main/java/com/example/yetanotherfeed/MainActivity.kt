@@ -16,7 +16,10 @@ class MainActivity : AppCompatActivity(),
 
     companion object {
         lateinit var sharedPreferences: SharedPreferences
+        var CONNECTED: Boolean? = null
     }
+
+    private var receiver = ConnectivityReceiver()
 
     private val APP_PREFERENCES = "mysettings"
 
@@ -29,7 +32,7 @@ class MainActivity : AppCompatActivity(),
         supportActionBar?.title = ""
 
         registerReceiver(
-            ConnectivityReceiver(),
+            receiver,
             IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         )
     }
@@ -71,6 +74,11 @@ class MainActivity : AppCompatActivity(),
         super.onResume()
 
         ConnectivityReceiver.connectivityReceiverListener = this
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(receiver)
     }
 
     override fun onNetworkConnectionChanged(isConnected: Boolean) {

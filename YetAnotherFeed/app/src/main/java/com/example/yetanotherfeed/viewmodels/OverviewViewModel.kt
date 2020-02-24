@@ -18,6 +18,8 @@ enum class LoadingStatus { LOADING, ERROR, DONE }
 
 class OverviewViewModel(application: Application) : ViewModel() {
 
+
+
     private val APP_PREFERENCES_LINK = "linkRss"
     private var linkRss: String
 
