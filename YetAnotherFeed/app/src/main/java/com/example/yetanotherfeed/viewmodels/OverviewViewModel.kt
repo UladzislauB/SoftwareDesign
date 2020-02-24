@@ -10,10 +10,7 @@ import com.example.yetanotherfeed.MainActivity
 import com.example.yetanotherfeed.database.getDatabase
 import com.example.yetanotherfeed.network.YetAnotherFeedNetwork
 import com.example.yetanotherfeed.repository.ItemsRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import retrofit2.HttpException
 
 
@@ -22,7 +19,7 @@ enum class LoadingStatus { LOADING, ERROR, DONE }
 class OverviewViewModel(application: Application) : ViewModel() {
 
     private val APP_PREFERENCES_LINK = "linkRss"
-    private lateinit var linkRss: String
+    private var linkRss: String
 
     private var _eventNetworkError = MutableLiveData<Boolean>(false)
     val eventNetworkError: LiveData<Boolean>
@@ -72,8 +69,15 @@ class OverviewViewModel(application: Application) : ViewModel() {
                     _eventNetworkError.value = true
                 } catch (e: Exception) {
                     _status.value = LoadingStatus.ERROR
+                    setDeafaultEnclosures()
                 }
             }
+        }
+    }
+
+    private fun setDeafaultEnclosures() {
+        coroutineScope.launch {
+            itemsRepository.updateEnclosuresWithFalse()
         }
     }
 

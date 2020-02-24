@@ -23,4 +23,10 @@ class ItemsRepository(private val database: ItemsDatabase) {
             database.itemDao.insertAll(list.asDatabaseModel())
         }
     }
+
+    suspend fun updateEnclosuresWithFalse() {
+        withContext(Dispatchers.IO) {
+            database.itemDao.updateEnclosuresWithDefaults()
+        }
+    }
 }

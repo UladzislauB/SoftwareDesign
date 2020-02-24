@@ -69,3 +69,14 @@ fun bindImage(imageView: ImageView, imageUrl: String?) {
             imageView.setImageResource(android.R.color.transparent)
     }
 }
+
+
+@BindingAdapter("isCached")
+fun bindCachedSign(imageView: ImageView, item: Item?) {
+    item?.let {
+        if (item.enclosure as Boolean)
+            imageView.setImageResource(R.drawable.ic_cached_24px)
+        else
+            imageView.setImageResource(android.R.color.transparent)
+    }
+}

@@ -7,14 +7,23 @@ import androidx.room.*
 @Dao
 interface ItemDAO {
 
-    @Query("SELECT * FROM rss_items_table")
+    @Query("SELECT * FROM rss_feeds_items_table")
     fun getAllItems(): LiveData<List<DatabaseItem>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(items: List<DatabaseItem>)
 
-    @Query("DELETE FROM rss_items_table")
+    @Query("DELETE FROM rss_feeds_items_table")
     fun clearData()
+
+    @Update
+    fun update(item: DatabaseItem)
+
+    @Query("SELECT * FROM rss_feeds_items_table WHERE link = :link")
+    fun getItemByLink(link: String) : DatabaseItem
+
+    @Query("UPDATE rss_feeds_items_table SET enclosure = 0")
+    fun updateEnclosuresWithDefaults()
 }
 
 @Database(entities = [DatabaseItem::class], version = 1)
@@ -32,7 +41,7 @@ fun getDatabase(context: Context): ItemsDatabase {
             INSTANCE = Room.databaseBuilder(
                 context.applicationContext,
                 ItemsDatabase::class.java,
-                "rss_items"
+                "yet_another_feed"
             ).build()
         }
     }

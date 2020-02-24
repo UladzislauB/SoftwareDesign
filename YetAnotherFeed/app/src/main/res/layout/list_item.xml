@@ -70,6 +70,13 @@
                 android:layout_weight="1"
                 app:imageUrl="@{item.thumbnail}"
                 tools:src="@drawable/ic_broken_image" />
+
+            <ImageView
+                android:id="@+id/isCachedMark"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:isCached="@{item}"
+                tools:src="@drawable/ic_cached_24px"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </layout>

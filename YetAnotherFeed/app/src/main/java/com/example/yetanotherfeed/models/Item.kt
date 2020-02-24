@@ -11,7 +11,7 @@ data class Item (
     val thumbnail: String,
     val description: String,
     val content: String,
-    val enclosure: Any,
+    var enclosure: Any,
     val categories: List<String>
 )
 
@@ -24,7 +24,8 @@ fun List<Item>.asDatabaseModel(): List<DatabaseItem> {
             pubDate = it.pubDate,
             content = Regex("\\<.*?\\>").replace(it.content, ""),
             link = it.link,
-            thumbnail = it.thumbnail
+            thumbnail = it.thumbnail,
+            enclosure = false
         )
     }
 }
